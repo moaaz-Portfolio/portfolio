@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel | Moaaz Designer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+    <style>
+        body { background: #050505; color: #fff; font-family: 'Plus Jakarta Sans', sans-serif; }
+        .input-field { background: #111; border: 1px solid #222; border-radius: 12px; padding: 12px; width: 100%; margin-bottom: 20px; color: #fff; outline: none; transition: 0.3s; }
+        .input-field:focus { border-color: #fff; }
+        .btn-add { background: #fff; color: #000; font-weight: 800; padding: 15px; border-radius: 12px; width: 100%; transition: 0.3s; cursor: pointer; }
+        .btn-add:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(255,255,255,0.1); }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-6">
+
+    <div class="max-w-md w-full bg-[#0a0a0a] p-8 rounded-[30px] border border-white/5">
+        <div class="text-center mb-8">
+            <h2 class="text-2xl font-black tracking-tighter uppercase">Add Project</h2>
+            <p class="text-[10px] text-gray-500 tracking-[0.3em] uppercase mt-1">Control Panel</p>
+        </div>
+        
+        <form id="projectForm">
+            <label class="text-[10px] uppercase tracking-widest text-gray-500 mb-2 block">Project Title</label>
+            <input type="text" id="pName" class="input-field" placeholder="e.g. Barns Design" required>
+
+            <label class="text-[10px] uppercase tracking-widest text-gray-500 mb-2 block">Category</label>
+            <input type="text" id="pCategory" class="input-field" placeholder="e.g. Canva Mastery" required>
+
+            <label class="text-[10px] uppercase tracking-widest text-gray-500 mb-2 block">Image Filename (or Link)</label>
+            <input type="text" id="pUrl" class="input-field" placeholder="e.g. barns.png" required>
+
+            <button type="submit" class="btn-add">PUBLISH TO WEBSITE</button>
+        </form>
+        <p id="status" class="mt-6 text-center text-xs font-bold tracking-widest"></p>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        // بيانات الربط الخاصة بمشروعك (desinger-584a4)
+        const firebaseConfig = {
+            apiKey: "AIzaSyDsYNycH16UHTOKcQPXHEsq-glJslhdAJA",
+            authDomain: "desinger-584a4.firebaseapp.com",
+            projectId: "desinger-584a4",
+            storageBucket: "desinger-584a4.firebasestorage.app",
+            messagingSenderId: "669703794280",
+            appId: "1:669703794280:web:eeef5b8a181d8a44de55dd",
+            measurementId: "G-G8H9CY4T87"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        const form = document.getElementById('projectForm');
+        const status = document.getElementById('status');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            status.style.color = "#666";
+            status.innerText = "UPLOADING...";
+
+            try {
+                await addDoc(collection(db, "projects"), {
+                    title: document.getElementById('pName').value,
+                    category: document.getElementById('pCategory').value,
+                    imageUrl: document.getElementById('pUrl').value,
+                    createdAt: serverTimestamp()
+                });
+                status.style.color = "#4ade80"; // Green color
+                status.innerText = "SUCCESSFULLY PUBLISHED!";
+                form.reset();
+            } catch (error) {
+                status.style.color = "#f87171"; // Red color
+                status.innerText = "ERROR: " + error.message;
+            }
+        });
+    </script>
+</body>
+</html>

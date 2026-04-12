@@ -1,187 +1,172 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Portfolio |Moaaz Designer</title>
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Poppins:wght@300;600;800&display=swap" rel="stylesheet">
-<style>
-:root {
-  --accent:#6200ea; --accent-glow: rgba(98,0,234,0.4);
-  --transition-smooth: all 0.6s cubic-bezier(0.23,1,0.32,1);
-  --bg-dark:#050505; --text-dark:#fff; --glass-dark: rgba(255,255,255,0.03);
-  --card-bg-dark: rgba(20,20,20,0.8);
-}
-body{margin:0;font-family:'Poppins','Cairo',sans-serif;background:var(--bg-dark);color:var(--text-dark);transition:var(--transition-smooth);}
-body.light-mode{--bg-dark:#f5f5f7;--text-dark:#1d1d1f;--glass-dark:rgba(0,0,0,0.05);--card-bg-dark:rgba(255,255,255,0.9);}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Moaaz | Professional Designer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.19/bundled/lenis.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@800;900&display=swap" rel="stylesheet">
+    
+    <style>
+        body { background-color: #050505; color: #ffffff; font-family: 'Plus Jakarta Sans', sans-serif; overflow-x: hidden; width: 100%; margin: 0; }
 
-/* --- HEADER --- */
-nav{position:fixed;top:0;width:100%;display:flex;justify-content:space-between;align-items:center;padding:15px 5%;backdrop-filter:blur(20px);background:rgba(0,0,0,0.5);z-index:1000;border-bottom:1px solid rgba(255,255,255,0.1);}
-.nav-left,.nav-center,.nav-right{display:flex;align-items:center;}
-.logo{font-size:1.5rem;font-weight:800;color:white;letter-spacing:2px;}
-.logo span{color:var(--accent);}
-.nav-links{display:flex;list-style:none;gap:30px;}
-.nav-links li a{text-decoration:none;color:white;font-weight:500;opacity:0.8;transition:0.3s;}
-.nav-links li a:hover{opacity:1;color:var(--accent);}
-button{margin-left:10px;padding:8px 15px;border-radius:12px;border:none;cursor:pointer;background:rgba(255,255,255,0.1);color:white;transition:0.3s;}
-button:hover{background:var(--accent);color:white;}
-.hamburger{display:none;font-size:1.8rem;cursor:pointer;margin-left:10px;color:white;}
+        /* اللودر المحترف الجديد */
+        #loader {
+            position: fixed; inset: 0; z-index: 9999;
+            display: flex; justify-content: center; align-items: center;
+            background: #000;
+        }
 
-/* --- HERO --- */
-.hero{height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 10%;background:radial-gradient(circle at center,#111 0%,#050505 100%);}
-.hero h1{font-size:clamp(2rem,8vw,5.5rem);font-weight:800;line-height:1.1;margin-bottom:20px;background:linear-gradient(90deg,#fff,var(--accent),#fff);background-size:200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:shine 8s linear infinite;}
-@keyframes shine{to{background-position:200%;}}
-.hero p{font-size:1.1rem;opacity:0.85;margin-top:10px;}
-.cta-btn{margin-top:30px;padding:18px 45px;background:var(--accent);color:white;text-decoration:none;border-radius:50px;font-weight:600;box-shadow:0 10px 30px var(--accent-glow);transition:var(--transition-smooth);}
-.cta-btn:hover{transform:translateY(-5px);box-shadow:0 15px 45px var(--accent);}
+        .loader-wrapper { text-align: center; width: 100%; px: 20px; }
 
-/* --- WORK GRID --- */
-.section-padding{padding:100px 10%;}
-.grid-container{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:40px;margin-top:50px;}
-.project-card{background:var(--card-bg-dark);border-radius:30px;overflow:hidden;border:1px solid rgba(255,255,255,0.05);transition:var(--transition-smooth);position:relative;}
-.project-card:hover{transform:translateY(-15px) scale(1.02);border-color:var(--accent);box-shadow:0 30px 60px rgba(0,0,0,0.5);}
-.card-img{width:100%;height:auto;aspect-ratio:16/9;overflow:hidden;cursor:pointer;}
-.card-img img{width:100%;height:100%;object-fit:cover;transition:0.5s;}
-.project-card:hover .card-img img{transform:scale(1.1);}
-.card-info{padding:25px;}
+        .loader-text {
+            font-size: clamp(1rem, 5vw, 1.5rem);
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.3em;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
 
-/* --- REVEAL --- */
-.reveal{opacity:0;transform:translateY(50px);transition:var(--transition-smooth);}
-.reveal.active{opacity:1;transform:translateY(0);}
+        .loader-main-name {
+            font-size: clamp(1.5rem, 8vw, 3rem);
+            letter-spacing: -0.02em;
+            background: linear-gradient(to bottom, #fff 0%, #444 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
 
-/* --- LIGHTBOX --- */
-.lightbox{position:fixed;display:none;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);justify-content:center;align-items:center;z-index:2000;}
-.lightbox img{max-width:90%;max-height:90%;border-radius:15px;box-shadow:0 20px 60px rgba(0,0,0,0.7);transition:0.3s;}
+        /* نافيجيشن */
+        .floating-nav {
+            position: fixed; top: 15px; left: 50%; transform: translateX(-50%);
+            width: 90%; background: rgba(10, 10, 10, 0.8); backdrop-filter: blur(15px);
+            border-radius: 100px; z-index: 1000; padding: 10px 20px;
+            display: flex; justify-content: space-between; align-items: center;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
 
-/* --- MEDIA --- */
-@media(max-width:768px){.nav-center{display:none;position:absolute;top:65px;left:0;width:100%;background:var(--bg-dark);flex-direction:column;gap:15px;padding:10px 0;}.nav-center.active{display:flex;}.hamburger{display:block;}.hero{padding:0 5%;}.section-padding{padding:70px 5%;}.grid-container{gap:25px;}.cta-btn{padding:15px 35px;font-size:0.9rem;}}
-@media(max-width:480px){.hero h1{font-size:2rem;}.hero p{font-size:0.9rem;}.cta-btn{padding:12px 25px;font-size:0.85rem;}.grid-container{grid-template-columns:1fr;gap:20px;}.card-info{padding:15px;}.nav-left,.nav-center,.nav-right{width:100%;justify-content:space-between;}.nav-links{flex-direction:column;gap:15px;width:100%;}}
-</style>
+        /* الاسم في الهيرو */
+        .hero-title {
+            font-size: clamp(2.2rem, 11vw, 4rem); 
+            font-weight: 900; line-height: 1.05; letter-spacing: -0.04em;
+            text-transform: uppercase; text-align: center;
+            width: 100%; padding: 0 15px;
+        }
+
+        .reveal { clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%); overflow: hidden; }
+        .reveal span { display: block; transform: translateY(115%); }
+
+        .cta-btn {
+            background: #fff; color: #000; padding: 16px 35px; border-radius: 100px;
+            font-weight: 900; font-size: 11px; letter-spacing: 0.1em;
+            display: inline-block; margin-top: 30px;
+        }
+
+        .skills-section { background: #fff; color: #000; padding: 80px 25px; border-radius: 40px 40px 0 0; }
+        .f-card { background: #fcfcfc; border-radius: 25px; padding: 30px; border: 1px solid #eee; margin-bottom: 15px; opacity: 0; transform: translateY(20px); }
+    </style>
 </head>
-<body class="dark-mode">
+<body>
 
-<nav>
-  <div class="nav-left">
-    <div class="logo">Moaaz designer<span>.</span></div>
-  </div>
-
-  <div class="nav-center" id="nav-menu">
-    <ul class="nav-links">
-      <li><a href="#" data-en="Home" data-ar="الرئيسية">Home</a></li>
-      <li><a href="#work" data-en="Work" data-ar="أعمالي">Work</a></li>
-      <li class="menu-actions">
-        <button id="theme-toggle">🌙</button>
-        <button id="lang-switch">AR</button>
-      </li>
-    </ul>
-  </div>
-
-  <div class="nav-right">
-    <div class="hamburger" id="hamburger">&#9776;</div>
-  </div>
-</nav>
-
-<!-- HERO -->
-<section class="hero">
-  <h1 class="reveal active" data-en="Designing Beyond Limits" data-ar="نصمم أبعد من الحدود">Designing Beyond Limits</h1>
-  <p class="reveal active" data-en="Start your design journey with us" data-ar="ابدا رحلتك معنا في التصميم">Start your design journey with us</p>
-  <a href="#work" class="cta-btn reveal active" data-en="Explore Projects" data-ar="اكتشف المشاريع">Explore Projects</a>
-</section>
-
-<!-- WORK -->
-<section id="work" class="section-padding">
-  <h2 class="reveal" style="font-size:2.5rem;" data-en="Selected Projects" data-ar="مشاريع مختارة">Selected Projects</h2>
-  <div class="grid-container">
-    <div class="project-card reveal">
-      <div class="card-img"><img src="barns.png" alt="Work"></div>
-      <div class="card-info"><h3 data-en="Barns Desing" data-ar="تصميم بارنز">Barns Desing</h3><p style="opacity:0.6;font-size:0.9rem;">Canva Desing</p></div>
+    <div id="loader">
+        <div class="loader-wrapper">
+            <div class="loader-text">
+                <span class="opacity-40 text-[10px]">Creative Studio</span>
+                <div class="loader-main-name" id="L-Name">MOAAZ</div>
+                <span class="text-[10px] tracking-[0.6em]" id="L-Sub">PROFESSIONAL DESIGNER</span>
+            </div>
+        </div>
     </div>
-    <div class="project-card reveal">
-      <div class="card-img"><img src="Barbican.png" alt="Work"></div>
-      <div class="card-info"><h3 data-en="Barbican Desing" data-ar="تصميم باريبكان">Barbican Desing</h3><p style="opacity:0.6;font-size:0.9rem;">Canva Desing</p></div>
-    </div>
-    <div class="project-card reveal">
-  <div class="card-img">
-    <img src="Paradise.png" alt="Work">
-  </div>
-  <div class="card-info">
-    <h3 data-en="Smoothie Paradise Design" data-ar="تصميم سموزي برادايس">Smoothie Paradise Design</h3>
-    <p style="opacity:0.6;font-size:0.9rem;">Canva Design</p>
-  </div>
-</div>
-<div class="project-card reveal">
-  <div class="card-img">
-    <img src="Rehal.png" alt="Work">
-  </div>
-  <div class="card-info">
-    <h3 data-en="Rehal Forest Design" data-ar="تصميم رحال فوريست">Rehal Forest Design</h3>
-    <p style="opacity:0.6;font-size:0.9rem;">Canva Design</p>
-  </div>
-</div>
-<div class="project-card reveal">
-  <div class="card-img">
-    <img src="GT3.png" alt="Work">
-  </div>
-<div class="card-info">
-    <h3 data-en="HUAWEI WATCH GT 5" data-ar="تصميم ساعة هواوي ">HUAWEI WATCH GT 5</h3>
-    <p style="opacity:0.6;font-size:0.9rem;">Canva Design</p>
-  </div>
-  </div>
-  <div class="project-card reveal">
-  <div class="card-img">
-    <img src="teeth.png" alt="Work">
-  </div>
-  <div class="card-info">
-    <h3 data-en="Teeth Design" data-ar="تصميم أسنان">Teeth Design</h3>
-    <p style="opacity:0.6;font-size:0.9rem;">Canva Design</p>
-  </div>
-  </div>
-</section>
 
-<!-- Lightbox -->
-<div class="lightbox" id="lightbox"><img src="" id="lightbox-img"></div>
+    <header class="floating-nav">
+        <div class="text-xs font-black tracking-tighter">MOAAZ.</div>
+        <a href="projects.html" class="text-[9px] font-bold uppercase bg-white text-black px-4 py-2 rounded-full">Projects</a>
+    </header>
 
-<audio id="click-sound" src="https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3"></audio>
+    <main>
+        <section class="min-h-screen flex flex-col justify-center items-center pt-10">
+            <p class="text-[9px] uppercase tracking-[0.5em] mb-6 opacity-0 hero-fade font-bold text-gray-500">Visual Architect</p>
 
-<script>
-// Hamburger
-const hamburger = document.getElementById('hamburger');
-const navCenter = document.querySelector('.nav-center');
-hamburger.addEventListener('click',()=>{navCenter.classList.toggle('active');});
+            <h1 class="hero-title">
+                <div class="reveal"><span>Moaaz</span></div>
+                <div class="reveal"><span class="text-gray-500">Professional</span></div>
+                <div class="reveal"><span>Designer</span></div>
+            </h1>
+            
+            <div class="text-center px-8 opacity-0 hero-fade">
+                <p class="text-gray-400 text-[13px] max-w-[280px] mx-auto mt-6 leading-relaxed mb-8">
+                    Elevating brand identities through high-end <span class="text-white">Canva mastery</span> and minimalist luxury.
+                </p>
+                <a href="projects.html" class="cta-btn">VIEW PORTFOLIO</a>
+            </div>
+        </section>
 
-// Theme
-const themeToggle = document.getElementById('theme-toggle');
-themeToggle.addEventListener('click',()=>{document.body.classList.toggle('light-mode');themeToggle.innerText=document.body.classList.contains('light-mode')?'🌞':'🌙';});
+        <section id="skills" class="skills-section">
+            <h2 class="text-5xl font-black tracking-tighter uppercase mb-10">Core<br><span class="opacity-20">Skills.</span></h2>
+            <div class="space-y-4">
+                <div class="f-card scr-fade">
+                    <span class="text-[10px] font-black opacity-20">01</span>
+                    <h3 class="text-xl font-bold mt-1">Canva Mastery</h3>
+                    <p class="text-gray-500 text-sm mt-2">Bespoke layouts that redefine digital visual standards.</p>
+                </div>
+                <div class="f-card scr-fade">
+                    <span class="text-[10px] font-black opacity-20">02</span>
+                    <h3 class="text-xl font-bold mt-1">Visual Strategy</h3>
+                    <p class="text-gray-500 text-sm mt-2">Identity design that drives premium brand engagement.</p>
+                </div>
+                <div class="f-card scr-fade">
+                    <span class="text-[10px] font-black opacity-20">03</span>
+                    <h3 class="text-xl font-bold mt-1">Rapid Execution</h3>
+                    <p class="text-gray-500 text-sm mt-2">Elite quality results delivered with specialist speed.</p>
+                </div>
+            </div>
+        </section>
 
-// Language
-const langBtn=document.getElementById('lang-switch');
-langBtn.addEventListener('click',()=>{
-const isEn=document.documentElement.lang==='en';
-const newLang=isEn?'ar':'en';
-document.documentElement.lang=newLang;
-document.documentElement.dir=newLang==='ar'?'rtl':'ltr';
-langBtn.innerText=newLang==='ar'?'EN':'AR';
-document.querySelectorAll('[data-en]').forEach(el=>el.innerText=el.getAttribute(`data-${newLang}`));
-});
+        <footer class="py-20 text-center bg-white text-black">
+            <h3 class="text-4xl font-black tracking-tighter mb-6 uppercase">Let's Connect.</h3>
+            <a href="mailto:moaaz.designer@gmail.com" class="text-sm font-bold border-b-2 border-black pb-1">moaaz.designer@gmail.com</a>
+        </footer>
+    </main>
 
-// Scroll reveal
-const observer = new IntersectionObserver(entries=>{entries.forEach(entry=>{if(entry.isIntersecting)entry.target.classList.add('active');});},{threshold:0.1});
-document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+    <script>
+        const lenis = new Lenis();
+        function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
+        requestAnimationFrame(raf);
 
-// Click sound
-function playClick(){const audio=document.getElementById('click-sound');audio.currentTime=0;audio.volume=0.1;audio.play().catch(()=>{});}
+        // --- Cinematic Loader Animation ---
+        const tl = gsap.timeline();
+        
+        tl.from("#L-Name", { opacity: 0, y: 30, duration: 1, ease: "power4.out" })
+          .from("#L-Sub", { opacity: 0, letterSpacing: "0em", duration: 1, ease: "power2.out" }, "-=0.5")
+          .to("#loader", { 
+              clipPath: "inset(0 0 100% 0)", 
+              duration: 1.2, 
+              ease: "expo.inOut", 
+              delay: 0.8,
+              onComplete: () => {
+                  gsap.to(".reveal span", { y: 0, duration: 1, stagger: 0.1, ease: "power4.out" });
+                  gsap.to(".hero-fade", { opacity: 1, y: -10, duration: 0.8, delay: 0.5 });
+              }
+          });
 
-// Lightbox
-document.querySelectorAll('.card-img img').forEach(img=>{
-  img.addEventListener('click',()=>{
-    const lightbox=document.getElementById('lightbox');
-    const lightboxImg=document.getElementById('lightbox-img');
-    lightboxImg.src=img.src;
-    lightbox.style.display='flex';
-  });
-});
-document.getElementById('lightbox').addEventListener('click',()=>{document.getElementById('lightbox').style.display='none';});
-</script>
+        gsap.registerPlugin(ScrollTrigger);
 
+        document.querySelectorAll(".scr-fade").forEach(el => {
+            gsap.to(el, {
+                scrollTrigger: { trigger: el, start: "top 90%" },
+                opacity: 1, y: 0, duration: 0.8
+            });
+        });
+
+        gsap.to("body", {
+            scrollTrigger: { trigger: "#skills", start: "top center", end: "top", scrub: true },
+            backgroundColor: "#ffffff"
+        });
+    </script>
 </body>
 </html>
