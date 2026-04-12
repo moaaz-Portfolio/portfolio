@@ -6,6 +6,7 @@
     <title>MOAAZ ADMIN | SECURITY v13</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/browser-image-compression@2.0.2/dist/browser-image-compression.js"></script>
     <style>
         body { background: #000; color: #fff; font-family: 'Plus Jakarta Sans', sans-serif; }
         .glass { background: rgba(255,255,255,0.02); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.05); }
@@ -61,7 +62,6 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getFirestore, collection, addDoc, deleteDoc, doc, updateDoc, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        // CONFIG
         const firebaseConfig = {
             apiKey: "AIzaSyDsYNycH16UHTOKcQPXHEsq-glJslhdAJA",
             authDomain: "desinger-584a4.firebaseapp.com",
@@ -75,7 +75,7 @@
         const db = getFirestore(app);
         const IMGBB_API_KEY = "f1f849d83dda1149d7758df485628800";
 
-        // AUTH SYSTEM (V13: ALWAYS ASKS)
+        // التحقق من الهوية
         window.checkAuth = () => {
             const val = document.getElementById('masterKey').value;
             const error = document.getElementById('error-msg');
@@ -88,7 +88,7 @@
             }
         };
 
-        // SYNC DATA
+        // مزامنة البيانات وعرضها
         onSnapshot(query(collection(db, "projects"), orderBy("createdAt", "desc")), (snap) => {
             const grid = document.getElementById('projectsGrid');
             grid.innerHTML = "";
@@ -117,7 +117,7 @@
             if(confirm("Wipe from database?")) await deleteDoc(doc(db, "projects", id));
         };
 
-        // CORE UPLOAD LOGIC
+        // منطق الرفع السريع (الضغط ثم الرفع)
         document.getElementById('projectForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('submitBtn');
@@ -125,16 +125,27 @@
             const file = document.getElementById('pImageFile').files[0];
 
             btn.disabled = true;
-            msg.innerText = "🚀 PUSHING TO CLOUD...";
+            msg.innerText = "⚡ COMPRESSING & PUSHING...";
 
             try {
+                // ضغط الصورة (بخلي حجمها أقل من 1 ميجا تلقائياً)
+                const options = {
+                    maxSizeMB: 1,
+                    maxWidthOrHeight: 1280,
+                    useWebWorker: true
+                };
+                const compressedFile = await imageCompression(file, options);
+
                 const formData = new FormData();
-                formData.append("image", file);
+                formData.append("image", compressedFile);
+                
+                // الرفع لـ ImgBB
                 const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, { method: "POST", body: formData });
                 const result = await res.json();
                 
                 if(!result.success) throw new Error("Cloud Error");
 
+                // الإضافة لـ Firebase
                 await addDoc(collection(db, "projects"), {
                     title: document.getElementById('pName').value,
                     category: document.getElementById('pCategory').value,
