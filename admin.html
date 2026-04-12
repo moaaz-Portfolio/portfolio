@@ -3,14 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MOAAZ OS v9.0 | Direct Upload Edition</title>
+    <title>MOAAZ ADMIN | SECURITY v13</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         body { background: #000; color: #fff; font-family: 'Plus Jakarta Sans', sans-serif; }
         .glass { background: rgba(255,255,255,0.02); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.05); }
         .input-lux { background: #080808; border: 1px solid #1a1a1a; border-radius: 12px; padding: 12px; width: 100%; color: #fff; outline: none; font-size: 13px; }
-        .input-lux:focus { border-color: #fff; }
         #auth-overlay { position: fixed; inset: 0; background: #000; z-index: 9999; display: flex; align-items: center; justify-content: center; }
         .hidden-item { opacity: 0.3; filter: grayscale(1); }
     </style>
@@ -19,37 +18,35 @@
 
     <div id="auth-overlay">
         <div class="glass p-10 rounded-[40px] text-center w-full max-w-sm">
-            <h2 class="text-xl font-black mb-6 uppercase tracking-widest italic">Admin Access</h2>
-            <input type="password" id="masterKey" class="input-lux text-center text-xl tracking-[0.5em]" placeholder="••••">
-            <button onclick="checkAuth()" class="w-full bg-white text-black mt-6 py-4 rounded-xl font-bold uppercase text-[10px] tracking-widest">Enter</button>
+            <h2 class="text-xl font-black mb-6 uppercase tracking-widest italic text-blue-500">Security Portal</h2>
+            <input type="password" id="masterKey" class="input-lux text-center text-xl tracking-[0.5em] mb-4" placeholder="••••">
+            <button onclick="checkAuth()" class="w-full bg-white text-black py-4 rounded-xl font-black uppercase text-[10px] tracking-widest hover:bg-blue-500 hover:text-white transition">Verify Identity</button>
+            <p id="error-msg" class="text-red-500 text-[10px] mt-4 font-bold uppercase hidden">Access Denied</p>
         </div>
     </div>
 
     <div id="main-content" style="display:none;" class="p-6 lg:p-12">
         <div class="max-w-7xl mx-auto">
-            <header class="flex justify-between items-end mb-16">
-                <h1 class="text-3xl font-black italic tracking-tighter uppercase">Moaaz.Terminal</h1>
-                <button onclick="logout()" class="text-[9px] text-gray-500 hover:text-white uppercase font-black">Exit</button>
+            <header class="flex justify-between items-end mb-16 border-b border-white/5 pb-8">
+                <h1 class="text-3xl font-black italic tracking-tighter uppercase">Moaaz.Admin</h1>
+                <button onclick="location.reload()" class="text-[9px] text-gray-500 hover:text-white uppercase font-black">Lock System</button>
             </header>
 
             <div class="grid grid-cols-12 gap-10">
                 <div class="col-span-12 lg:col-span-4">
                     <form id="projectForm" class="glass p-8 rounded-[35px] space-y-6 sticky top-10">
-                        <input type="text" id="pName" class="input-lux" placeholder="Project Name" required>
+                        <input type="text" id="pName" class="input-lux" placeholder="Project Title" required>
                         <input type="text" id="pCategory" class="input-lux" placeholder="Category" required>
-                        
                         <div class="space-y-2">
-                            <label class="text-[9px] text-gray-500 uppercase font-black tracking-widest">Select Image from Device</label>
+                            <label class="text-[9px] text-gray-500 uppercase font-black tracking-widest">Original Canva File</label>
                             <input type="file" id="pImageFile" class="input-lux cursor-pointer" accept="image/*" required>
                         </div>
-                        
                         <select id="pStatus" class="input-lux">
-                            <option value="Visible">Visible</option>
+                            <option value="Visible">Public</option>
                             <option value="Hidden">Hidden</option>
                         </select>
-
-                        <button type="submit" id="submitBtn" class="w-full bg-white text-black py-5 rounded-2xl font-black uppercase text-[11px] tracking-widest hover:bg-gray-200 transition">Deploy Now</button>
-                        <p id="statusMsg" class="text-[9px] text-center uppercase font-bold text-white/30"></p>
+                        <button type="submit" id="submitBtn" class="w-full bg-blue-600 text-white py-5 rounded-2xl font-black uppercase text-[11px] tracking-widest">Deploy Assets</button>
+                        <p id="statusMsg" class="text-[9px] text-center uppercase font-black tracking-widest"></p>
                     </form>
                 </div>
 
@@ -64,6 +61,7 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getFirestore, collection, addDoc, deleteDoc, doc, updateDoc, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
+        // CONFIG
         const firebaseConfig = {
             apiKey: "AIzaSyDsYNycH16UHTOKcQPXHEsq-glJslhdAJA",
             authDomain: "desinger-584a4.firebaseapp.com",
@@ -75,22 +73,22 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
+        const IMGBB_API_KEY = "f1f849d83dda1149d7758df485628800";
 
-        // AUTH
+        // AUTH SYSTEM (V13: ALWAYS ASKS)
         window.checkAuth = () => {
-            if(document.getElementById('masterKey').value === "2008") {
+            const val = document.getElementById('masterKey').value;
+            const error = document.getElementById('error-msg');
+            if(val === "2008") {
                 document.getElementById('auth-overlay').style.display = 'none';
                 document.getElementById('main-content').style.display = 'block';
-                localStorage.setItem('moaaz_auth', 'true');
+            } else {
+                error.classList.remove('hidden');
+                setTimeout(() => error.classList.add('hidden'), 2000);
             }
         };
-        if(localStorage.getItem('moaaz_auth')) {
-            document.getElementById('auth-overlay').style.display = 'none';
-            document.getElementById('main-content').style.display = 'block';
-        }
-        window.logout = () => { localStorage.removeItem('moaaz_auth'); location.reload(); };
 
-        // REAL-TIME SYNC
+        // SYNC DATA
         onSnapshot(query(collection(db, "projects"), orderBy("createdAt", "desc")), (snap) => {
             const grid = document.getElementById('projectsGrid');
             grid.innerHTML = "";
@@ -98,70 +96,62 @@
                 const p = d.data();
                 const isHidden = p.status === 'Hidden';
                 grid.innerHTML += `
-                    <div class="glass p-6 rounded-[32px] ${isHidden ? 'hidden-item' : ''}">
+                    <div class="glass p-5 rounded-[30px] ${isHidden ? 'hidden-item' : ''}">
                         <div class="flex justify-between items-center mb-4">
-                            <button onclick="toggleVis('${d.id}', '${p.status}')" class="text-xl">${isHidden ? '🕶️' : '👁️'}</button>
-                            <button onclick="deleteEntry('${d.id}')" class="text-red-900 hover:text-red-500 text-[10px] font-bold uppercase">Delete</button>
+                            <button onclick="toggleVis('${d.id}', '${p.status}')" class="text-lg">${isHidden ? '🕶️' : '👁️'}</button>
+                            <button onclick="deleteEntry('${d.id}')" class="text-red-900 text-[10px] font-black uppercase">Delete</button>
                         </div>
                         <img src="${p.imageUrl}" class="w-full aspect-square object-cover rounded-2xl mb-4 border border-white/5">
-                        <h3 class="font-bold text-lg">${p.title}</h3>
-                        <p class="text-[10px] text-gray-500 uppercase tracking-widest">${p.category}</p>
+                        <h3 class="font-bold text-lg tracking-tighter truncate">${p.title}</h3>
+                        <p class="text-[9px] text-gray-500 font-black uppercase tracking-widest">${p.category}</p>
                     </div>
                 `;
             });
         });
 
         window.toggleVis = async (id, cur) => {
-            const next = cur === 'Visible' ? 'Hidden' : 'Visible';
-            await updateDoc(doc(db, "projects", id), { status: next });
+            await updateDoc(doc(db, "projects", id), { status: cur === 'Visible' ? 'Hidden' : 'Visible' });
         };
 
         window.deleteEntry = async (id) => {
-            if(confirm("Confirm Delete?")) await deleteDoc(doc(db, "projects", id));
+            if(confirm("Wipe from database?")) await deleteDoc(doc(db, "projects", id));
         };
 
-        // IMAGE TO BASE64 CONVERTER
-        const toBase64 = file => new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = () => resolve(reader.result);
-            reader.onerror = error => reject(error);
-        });
-
-        // SUBMIT FORM
+        // CORE UPLOAD LOGIC
         document.getElementById('projectForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('submitBtn');
             const msg = document.getElementById('statusMsg');
             const file = document.getElementById('pImageFile').files[0];
 
-            if(file.size > 1048487) { // 1MB limit for safety
-                alert("Image too big! Please use a smaller image (under 1MB).");
-                return;
-            }
-
             btn.disabled = true;
-            msg.innerText = "Processing & Uploading...";
+            msg.innerText = "🚀 PUSHING TO CLOUD...";
 
             try {
-                const base64Img = await toBase64(file);
+                const formData = new FormData();
+                formData.append("image", file);
+                const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, { method: "POST", body: formData });
+                const result = await res.json();
                 
+                if(!result.success) throw new Error("Cloud Error");
+
                 await addDoc(collection(db, "projects"), {
                     title: document.getElementById('pName').value,
                     category: document.getElementById('pCategory').value,
-                    imageUrl: base64Img, // خزننا الصورة كنص
+                    imageUrl: result.data.url,
                     status: document.getElementById('pStatus').value,
                     createdAt: serverTimestamp()
                 });
 
-                msg.innerText = "Successfully Uploaded!";
-                setTimeout(() => msg.innerText = "", 3000);
+                msg.style.color = "#4ade80";
+                msg.innerText = "SUCCESSFULLY DEPLOYED";
                 e.target.reset();
             } catch (err) {
-                console.error(err);
-                msg.innerText = "Error uploading data.";
+                msg.style.color = "#f87171";
+                msg.innerText = "FAILED: CHECK CONNECTION";
             } finally {
                 btn.disabled = false;
+                setTimeout(() => msg.innerText = "", 3000);
             }
         });
     </script>
