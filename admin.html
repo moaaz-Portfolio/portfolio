@@ -3,69 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MOAAZ OS v4.0 | Enterprise Edition</title>
+    <title>MOAAZ OS v9.0 | Direct Upload Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        :root { --accent: #ffffff; --bg: #020202; }
-        body { background: var(--bg); color: #fff; font-family: 'Plus Jakarta Sans', sans-serif; }
-        .glass-card { background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(25px); border: 1px solid rgba(255,255,255,0.05); transition: 0.4s cubic-bezier(0.2, 1, 0.3, 1); }
-        .glass-card:hover { border-color: rgba(255,255,255,0.2); box-shadow: 0 0 40px rgba(255,255,255,0.05); }
-        .input-lux { background: #080808; border: 1px solid #151515; border-radius: 12px; padding: 12px; width: 100%; color: #fff; outline: none; }
+        body { background: #000; color: #fff; font-family: 'Plus Jakarta Sans', sans-serif; }
+        .glass { background: rgba(255,255,255,0.02); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.05); }
+        .input-lux { background: #080808; border: 1px solid #1a1a1a; border-radius: 12px; padding: 12px; width: 100%; color: #fff; outline: none; font-size: 13px; }
         .input-lux:focus { border-color: #fff; }
-        .hidden-project { opacity: 0.4; filter: grayscale(1); }
-        .btn-action { padding: 8px; border-radius: 8px; background: rgba(255,255,255,0.05); transition: 0.3s; }
-        .btn-action:hover { background: rgba(255,255,255,0.2); }
-        ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
+        #auth-overlay { position: fixed; inset: 0; background: #000; z-index: 9999; display: flex; align-items: center; justify-content: center; }
+        .hidden-item { opacity: 0.3; filter: grayscale(1); }
     </style>
 </head>
-<body class="p-4 lg:p-10">
+<body>
 
-    <div class="max-w-[1700px] mx-auto grid grid-cols-12 gap-8">
-        
-        <aside class="col-span-12 lg:col-span-3 space-y-6">
-            <div class="glass-card p-8 rounded-[35px] sticky top-10">
-                <div class="flex justify-between items-center mb-10">
-                    <h1 class="text-2xl font-black italic tracking-tighter">MOAAZ.OS</h1>
-                    <span class="text-[9px] bg-white text-black px-2 py-1 rounded font-bold">V4.0</span>
+    <div id="auth-overlay">
+        <div class="glass p-10 rounded-[40px] text-center w-full max-w-sm">
+            <h2 class="text-xl font-black mb-6 uppercase tracking-widest italic">Admin Access</h2>
+            <input type="password" id="masterKey" class="input-lux text-center text-xl tracking-[0.5em]" placeholder="••••">
+            <button onclick="checkAuth()" class="w-full bg-white text-black mt-6 py-4 rounded-xl font-bold uppercase text-[10px] tracking-widest">Enter</button>
+        </div>
+    </div>
+
+    <div id="main-content" style="display:none;" class="p-6 lg:p-12">
+        <div class="max-w-7xl mx-auto">
+            <header class="flex justify-between items-end mb-16">
+                <h1 class="text-3xl font-black italic tracking-tighter uppercase">Moaaz.Terminal</h1>
+                <button onclick="logout()" class="text-[9px] text-gray-500 hover:text-white uppercase font-black">Exit</button>
+            </header>
+
+            <div class="grid grid-cols-12 gap-10">
+                <div class="col-span-12 lg:col-span-4">
+                    <form id="projectForm" class="glass p-8 rounded-[35px] space-y-6 sticky top-10">
+                        <input type="text" id="pName" class="input-lux" placeholder="Project Name" required>
+                        <input type="text" id="pCategory" class="input-lux" placeholder="Category" required>
+                        
+                        <div class="space-y-2">
+                            <label class="text-[9px] text-gray-500 uppercase font-black tracking-widest">Select Image from Device</label>
+                            <input type="file" id="pImageFile" class="input-lux cursor-pointer" accept="image/*" required>
+                        </div>
+                        
+                        <select id="pStatus" class="input-lux">
+                            <option value="Visible">Visible</option>
+                            <option value="Hidden">Hidden</option>
+                        </select>
+
+                        <button type="submit" id="submitBtn" class="w-full bg-white text-black py-5 rounded-2xl font-black uppercase text-[11px] tracking-widest hover:bg-gray-200 transition">Deploy Now</button>
+                        <p id="statusMsg" class="text-[9px] text-center uppercase font-bold text-white/30"></p>
+                    </form>
                 </div>
 
-                <form id="projectForm" class="space-y-4">
-                    <input type="text" id="pName" class="input-lux" placeholder="Project Name" required>
-                    <input type="text" id="pCategory" class="input-lux" placeholder="Category" required>
-                    <input type="text" id="pUrl" class="input-lux" placeholder="Image Name (e.g. watch.png)" required>
-                    <select id="pStatus" class="input-lux">
-                        <option value="Visible">Public (Live)</option>
-                        <option value="Hidden">Hidden (Draft)</option>
-                    </select>
-                    <button type="submit" class="w-full bg-white text-black py-4 rounded-xl font-black text-xs uppercase tracking-widest hover:scale-[1.02] transition">Deploy Now</button>
-                </form>
-
-                <div class="mt-10 pt-6 border-t border-white/5 space-y-3">
-                    <button onclick="exportData()" class="w-full text-[10px] text-gray-500 hover:text-white transition flex items-center justify-between uppercase font-bold tracking-widest">
-                        <span>Backup Database</span>
-                        <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M7.5 10.5L10.5 7.5H4.5L7.5 10.5Z" fill="currentColor"></path></svg>
-                    </button>
+                <div class="col-span-12 lg:col-span-8">
+                    <div id="projectsGrid" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
                 </div>
             </div>
-        </aside>
-
-        <main class="col-span-12 lg:col-span-9 space-y-8">
-            <div class="flex justify-between items-end">
-                <div>
-                    <h2 class="text-4xl font-black tracking-tighter uppercase">Infrastructure</h2>
-                    <p class="text-gray-500 text-xs mt-2 uppercase tracking-[0.3em]">System Health: <span class="text-green-500">Nominal</span></p>
-                </div>
-                <div class="glass-card px-6 py-4 rounded-2xl flex items-baseline gap-2">
-                    <span id="totalCount" class="text-3xl font-black">0</span>
-                    <span class="text-[10px] text-gray-500 uppercase font-bold tracking-widest">Records</span>
-                </div>
-            </div>
-
-            <div id="projectsGrid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                </div>
-        </main>
+        </div>
     </div>
 
     <script type="module">
@@ -83,71 +75,94 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
-        let allProjects = [];
 
-        // LOAD & RENDER
+        // AUTH
+        window.checkAuth = () => {
+            if(document.getElementById('masterKey').value === "2008") {
+                document.getElementById('auth-overlay').style.display = 'none';
+                document.getElementById('main-content').style.display = 'block';
+                localStorage.setItem('moaaz_auth', 'true');
+            }
+        };
+        if(localStorage.getItem('moaaz_auth')) {
+            document.getElementById('auth-overlay').style.display = 'none';
+            document.getElementById('main-content').style.display = 'block';
+        }
+        window.logout = () => { localStorage.removeItem('moaaz_auth'); location.reload(); };
+
+        // REAL-TIME SYNC
         onSnapshot(query(collection(db, "projects"), orderBy("createdAt", "desc")), (snap) => {
-            allProjects = snap.docs.map(d => ({id: d.id, ...d.data()}));
-            document.getElementById('totalCount').innerText = allProjects.length;
-            render();
-        });
-
-        function render() {
             const grid = document.getElementById('projectsGrid');
             grid.innerHTML = "";
-            allProjects.forEach(p => {
+            snap.forEach(d => {
+                const p = d.data();
                 const isHidden = p.status === 'Hidden';
-                const card = document.createElement('div');
-                card.className = `glass-card p-6 rounded-[30px] relative group ${isHidden ? 'hidden-project' : ''}`;
-                card.innerHTML = `
-                    <div class="flex justify-between items-center mb-6">
-                        <div class="flex gap-2">
-                            <button onclick="toggleVisibility('${p.id}', '${p.status}')" class="btn-action text-gray-400 hover:text-white" title="Toggle Visibility">
-                                ${isHidden ? '👁️' : '🕶️'}
-                            </button>
-                            <a href="${p.imageUrl}" target="_blank" class="btn-action text-gray-400 hover:text-white" title="Open Image">🔗</a>
+                grid.innerHTML += `
+                    <div class="glass p-6 rounded-[32px] ${isHidden ? 'hidden-item' : ''}">
+                        <div class="flex justify-between items-center mb-4">
+                            <button onclick="toggleVis('${d.id}', '${p.status}')" class="text-xl">${isHidden ? '🕶️' : '👁️'}</button>
+                            <button onclick="deleteEntry('${d.id}')" class="text-red-900 hover:text-red-500 text-[10px] font-bold uppercase">Delete</button>
                         </div>
-                        <button onclick="deleteProject('${p.id}')" class="btn-action text-red-900 hover:text-red-500 transition">✕</button>
-                    </div>
-                    <h3 class="font-extrabold text-lg truncate">${p.title}</h3>
-                    <p class="text-[10px] text-gray-500 uppercase tracking-widest mb-4">${p.category}</p>
-                    <div class="aspect-video bg-black/40 rounded-2xl overflow-hidden border border-white/5">
-                        <img src="${p.imageUrl}" class="w-full h-full object-cover">
+                        <img src="${p.imageUrl}" class="w-full aspect-square object-cover rounded-2xl mb-4 border border-white/5">
+                        <h3 class="font-bold text-lg">${p.title}</h3>
+                        <p class="text-[10px] text-gray-500 uppercase tracking-widest">${p.category}</p>
                     </div>
                 `;
-                grid.appendChild(card);
             });
-        }
+        });
 
-        // ACTIONS
-        window.toggleVisibility = async (id, currentStatus) => {
-            const newStatus = currentStatus === 'Hidden' ? 'Visible' : 'Hidden';
-            await updateDoc(doc(db, "projects", id), { status: newStatus });
+        window.toggleVis = async (id, cur) => {
+            const next = cur === 'Visible' ? 'Hidden' : 'Visible';
+            await updateDoc(doc(db, "projects", id), { status: next });
         };
 
-        window.deleteProject = async (id) => {
-            if(confirm("Permanent Delete?")) await deleteDoc(doc(db, "projects", id));
+        window.deleteEntry = async (id) => {
+            if(confirm("Confirm Delete?")) await deleteDoc(doc(db, "projects", id));
         };
 
-        window.exportData = () => {
-            const blob = new Blob([JSON.stringify(allProjects, null, 2)], {type: 'application/json'});
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `Moaaz_Backup_${new Date().toLocaleDateString()}.json`;
-            a.click();
-        };
+        // IMAGE TO BASE64 CONVERTER
+        const toBase64 = file => new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = error => reject(error);
+        });
 
+        // SUBMIT FORM
         document.getElementById('projectForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            await addDoc(collection(db, "projects"), {
-                title: document.getElementById('pName').value,
-                category: document.getElementById('pCategory').value,
-                imageUrl: document.getElementById('pUrl').value,
-                status: document.getElementById('pStatus').value,
-                createdAt: serverTimestamp()
-            });
-            e.target.reset();
+            const btn = document.getElementById('submitBtn');
+            const msg = document.getElementById('statusMsg');
+            const file = document.getElementById('pImageFile').files[0];
+
+            if(file.size > 1048487) { // 1MB limit for safety
+                alert("Image too big! Please use a smaller image (under 1MB).");
+                return;
+            }
+
+            btn.disabled = true;
+            msg.innerText = "Processing & Uploading...";
+
+            try {
+                const base64Img = await toBase64(file);
+                
+                await addDoc(collection(db, "projects"), {
+                    title: document.getElementById('pName').value,
+                    category: document.getElementById('pCategory').value,
+                    imageUrl: base64Img, // خزننا الصورة كنص
+                    status: document.getElementById('pStatus').value,
+                    createdAt: serverTimestamp()
+                });
+
+                msg.innerText = "Successfully Uploaded!";
+                setTimeout(() => msg.innerText = "", 3000);
+                e.target.reset();
+            } catch (err) {
+                console.error(err);
+                msg.innerText = "Error uploading data.";
+            } finally {
+                btn.disabled = false;
+            }
         });
     </script>
 </body>
