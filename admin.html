@@ -3,93 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Moaaz | Mega Dashboard</title>
+    <title>MOAAZ OS v4.0 | Enterprise Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
-        body { background: #020202; color: #fff; font-family: 'Plus Jakarta Sans', sans-serif; }
-        .glass { background: rgba(15, 15, 15, 0.7); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.05); }
-        .input-field { background: #0c0c0c; border: 1px solid #1a1a1a; border-radius: 12px; padding: 14px; width: 100%; color: #fff; outline: none; transition: 0.3s; }
-        .input-field:focus { border-color: #ffffff; box-shadow: 0 0 15px rgba(255,255,255,0.05); }
-        .btn-primary { background: #fff; color: #000; font-weight: 800; border-radius: 12px; transition: 0.4s cubic-bezier(0.2, 1, 0.3, 1); }
-        .btn-primary:hover { transform: scale(1.02); filter: drop-shadow(0 0 10px rgba(255,255,255,0.4)); }
-        .project-card { transition: 0.3s; border: 1px solid rgba(255,255,255,0.03); }
-        .project-card:hover { border-color: rgba(255,255,255,0.2); background: rgba(20,20,20,1); }
-        ::-webkit-scrollbar { width: 5px; }
-        ::-webkit-scrollbar-thumb { background: #222; border-radius: 10px; }
+        :root { --accent: #ffffff; --bg: #020202; }
+        body { background: var(--bg); color: #fff; font-family: 'Plus Jakarta Sans', sans-serif; }
+        .glass-card { background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(25px); border: 1px solid rgba(255,255,255,0.05); transition: 0.4s cubic-bezier(0.2, 1, 0.3, 1); }
+        .glass-card:hover { border-color: rgba(255,255,255,0.2); box-shadow: 0 0 40px rgba(255,255,255,0.05); }
+        .input-lux { background: #080808; border: 1px solid #151515; border-radius: 12px; padding: 12px; width: 100%; color: #fff; outline: none; }
+        .input-lux:focus { border-color: #fff; }
+        .hidden-project { opacity: 0.4; filter: grayscale(1); }
+        .btn-action { padding: 8px; border-radius: 8px; background: rgba(255,255,255,0.05); transition: 0.3s; }
+        .btn-action:hover { background: rgba(255,255,255,0.2); }
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
     </style>
 </head>
-<body class="min-h-screen bg-[radial-gradient(circle_at_top_right,_#111_0%,_#020202_50%)]">
+<body class="p-4 lg:p-10">
 
-    <div class="flex flex-col lg:flex-row min-h-screen">
+    <div class="max-w-[1700px] mx-auto grid grid-cols-12 gap-8">
         
-        <aside class="lg:w-[400px] p-8 glass h-screen lg:sticky top-0 overflow-y-auto">
-            <div class="mb-10">
-                <h1 class="text-3xl font-black tracking-tighter uppercase leading-none">Moaaz<br><span class="text-gray-500 text-sm tracking-[0.4em] font-light italic">Designer OS</span></h1>
-            </div>
+        <aside class="col-span-12 lg:col-span-3 space-y-6">
+            <div class="glass-card p-8 rounded-[35px] sticky top-10">
+                <div class="flex justify-between items-center mb-10">
+                    <h1 class="text-2xl font-black italic tracking-tighter">MOAAZ.OS</h1>
+                    <span class="text-[9px] bg-white text-black px-2 py-1 rounded font-bold">V4.0</span>
+                </div>
 
-            <section>
-                <h2 class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-6 flex items-center gap-2">
-                    <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span> New Publication
-                </h2>
-                
-                <form id="projectForm" class="space-y-5">
-                    <div>
-                        <label class="text-[10px] uppercase text-gray-500 ml-1">Project Name</label>
-                        <input type="text" id="pName" class="input-field mt-1" placeholder="Barns Coffee" required>
-                    </div>
-
-                    <div>
-                        <label class="text-[10px] uppercase text-gray-500 ml-1">Category</label>
-                        <input type="text" id="pCategory" class="input-field mt-1" placeholder="Social Media" required>
-                    </div>
-
-                    <div>
-                        <label class="text-[10px] uppercase text-gray-500 ml-1">Image Asset Name</label>
-                        <input type="text" id="pUrl" class="input-field mt-1" placeholder="filename.png" required>
-                    </div>
-
-                    <button type="submit" id="submitBtn" class="btn-primary w-full py-4 mt-4 uppercase text-xs tracking-widest">
-                        Publish To Cloud
-                    </button>
+                <form id="projectForm" class="space-y-4">
+                    <input type="text" id="pName" class="input-lux" placeholder="Project Name" required>
+                    <input type="text" id="pCategory" class="input-lux" placeholder="Category" required>
+                    <input type="text" id="pUrl" class="input-lux" placeholder="Image Name (e.g. watch.png)" required>
+                    <select id="pStatus" class="input-lux">
+                        <option value="Visible">Public (Live)</option>
+                        <option value="Hidden">Hidden (Draft)</option>
+                    </select>
+                    <button type="submit" class="w-full bg-white text-black py-4 rounded-xl font-black text-xs uppercase tracking-widest hover:scale-[1.02] transition">Deploy Now</button>
                 </form>
-                <p id="status" class="mt-4 text-center text-[10px] uppercase font-bold tracking-tighter"></p>
-            </section>
+
+                <div class="mt-10 pt-6 border-t border-white/5 space-y-3">
+                    <button onclick="exportData()" class="w-full text-[10px] text-gray-500 hover:text-white transition flex items-center justify-between uppercase font-bold tracking-widest">
+                        <span>Backup Database</span>
+                        <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M7.5 10.5L10.5 7.5H4.5L7.5 10.5Z" fill="currentColor"></path></svg>
+                    </button>
+                </div>
+            </div>
         </aside>
 
-        <main class="flex-1 p-8 lg:p-16">
-            
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
-                <div class="glass p-8 rounded-[30px]">
-                    <p class="text-[10px] text-gray-500 uppercase tracking-widest mb-2">Total Works</p>
-                    <h3 id="totalCount" class="text-5xl font-black">0</h3>
+        <main class="col-span-12 lg:col-span-9 space-y-8">
+            <div class="flex justify-between items-end">
+                <div>
+                    <h2 class="text-4xl font-black tracking-tighter uppercase">Infrastructure</h2>
+                    <p class="text-gray-500 text-xs mt-2 uppercase tracking-[0.3em]">System Health: <span class="text-green-500">Nominal</span></p>
                 </div>
-                <div class="glass p-8 rounded-[30px] border-l-4 border-l-white">
-                    <p class="text-[10px] text-gray-500 uppercase tracking-widest mb-2">System Status</p>
-                    <h3 class="text-xl font-black uppercase text-green-400">Online</h3>
-                </div>
-                <div class="glass p-8 rounded-[30px]">
-                    <p class="text-[10px] text-gray-500 uppercase tracking-widest mb-2">Last Update</p>
-                    <h3 id="lastUpdate" class="text-sm font-bold text-gray-300">Today</h3>
+                <div class="glass-card px-6 py-4 rounded-2xl flex items-baseline gap-2">
+                    <span id="totalCount" class="text-3xl font-black">0</span>
+                    <span class="text-[10px] text-gray-500 uppercase font-bold tracking-widest">Records</span>
                 </div>
             </div>
 
-            <div>
-                <div class="flex justify-between items-center mb-10">
-                    <h2 class="text-4xl font-black tracking-tighter uppercase">Live Portfolio</h2>
-                    <span class="text-[10px] bg-white/10 px-4 py-2 rounded-full font-bold uppercase tracking-widest">Sync Active</span>
+            <div id="projectsGrid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                 </div>
-
-                <div id="projectsList" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    </div>
-            </div>
         </main>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, deleteDoc, doc, updateDoc, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDsYNycH16UHTOKcQPXHEsq-glJslhdAJA",
@@ -102,65 +83,72 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
+        let allProjects = [];
 
-        const form = document.getElementById('projectForm');
-        const status = document.getElementById('status');
-        const projectsList = document.getElementById('projectsList');
-        const totalCount = document.getElementById('totalCount');
-
-        // ADD PROJECT
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            status.innerText = "Processing Data...";
-            
-            try {
-                await addDoc(collection(db, "projects"), {
-                    title: document.getElementById('pName').value,
-                    category: document.getElementById('pCategory').value,
-                    imageUrl: document.getElementById('pUrl').value,
-                    createdAt: serverTimestamp()
-                });
-                status.style.color = "#4ade80";
-                status.innerText = "Project Synced Successfully";
-                form.reset();
-            } catch (error) {
-                status.style.color = "#f87171";
-                status.innerText = "Sync Error: " + error.message;
-            }
+        // LOAD & RENDER
+        onSnapshot(query(collection(db, "projects"), orderBy("createdAt", "desc")), (snap) => {
+            allProjects = snap.docs.map(d => ({id: d.id, ...d.data()}));
+            document.getElementById('totalCount').innerText = allProjects.length;
+            render();
         });
 
-        // LIVE LISTEN FOR CHANGES (Displaying Projects)
-        const q = query(collection(db, "projects"), orderBy("createdAt", "desc"));
-        onSnapshot(q, (snapshot) => {
-            projectsList.innerHTML = "";
-            totalCount.innerText = snapshot.size;
-            
-            snapshot.forEach((docSnap) => {
-                const data = docSnap.data();
+        function render() {
+            const grid = document.getElementById('projectsGrid');
+            grid.innerHTML = "";
+            allProjects.forEach(p => {
+                const isHidden = p.status === 'Hidden';
                 const card = document.createElement('div');
-                card.className = "project-card glass p-4 rounded-2xl flex items-center gap-4 group relative overflow-hidden";
+                card.className = `glass-card p-6 rounded-[30px] relative group ${isHidden ? 'hidden-project' : ''}`;
                 card.innerHTML = `
-                    <div class="w-16 h-16 rounded-xl bg-neutral-900 overflow-hidden">
-                        <img src="${data.imageUrl}" class="w-full h-full object-cover opacity-50">
+                    <div class="flex justify-between items-center mb-6">
+                        <div class="flex gap-2">
+                            <button onclick="toggleVisibility('${p.id}', '${p.status}')" class="btn-action text-gray-400 hover:text-white" title="Toggle Visibility">
+                                ${isHidden ? '👁️' : '🕶️'}
+                            </button>
+                            <a href="${p.imageUrl}" target="_blank" class="btn-action text-gray-400 hover:text-white" title="Open Image">🔗</a>
+                        </div>
+                        <button onclick="deleteProject('${p.id}')" class="btn-action text-red-900 hover:text-red-500 transition">✕</button>
                     </div>
-                    <div class="flex-1">
-                        <h4 class="font-bold text-sm tracking-tight">${data.title}</h4>
-                        <p class="text-[10px] text-gray-500 uppercase">${data.category}</p>
+                    <h3 class="font-extrabold text-lg truncate">${p.title}</h3>
+                    <p class="text-[10px] text-gray-500 uppercase tracking-widest mb-4">${p.category}</p>
+                    <div class="aspect-video bg-black/40 rounded-2xl overflow-hidden border border-white/5">
+                        <img src="${p.imageUrl}" class="w-full h-full object-cover">
                     </div>
-                    <button onclick="deleteProject('${docSnap.id}')" class="text-red-500 opacity-0 group-hover:opacity-100 p-2 hover:bg-red-500/10 rounded-lg transition-all">
-                        <svg width="18" height="18" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5.5 1C5.22386 1 5 1.22386 5 1.5C5 1.77614 5.22386 2 5.5 2H9.5C9.77614 2 10 1.77614 10 1.5C10 1.22386 9.77614 1 9.5 1H5.5ZM3 3.5C3 3.22386 3.22386 3 3.5 3H11.5C11.7761 3 12 3.22386 12 3.5C12 3.77614 11.7761 4 11.5 4H3.5C3.22386 4 3 3.77614 3 3.5ZM4.5 5C4.22386 5 4 5.22386 4 5.5V12C4 12.5523 4.44772 13 5 13H10C10.5523 13 11 12.5523 11 12V5.5C11 5.22386 10.7761 5 10.5 5H4.5Z" fill="currentColor"></path></svg>
-                    </button>
                 `;
-                projectsList.appendChild(card);
+                grid.appendChild(card);
             });
-        });
-
-        // DELETE PROJECT FUNCTION
-        window.deleteProject = async (id) => {
-            if(confirm("Are you sure you want to delete this project?")) {
-                await deleteDoc(doc(db, "projects", id));
-            }
         }
+
+        // ACTIONS
+        window.toggleVisibility = async (id, currentStatus) => {
+            const newStatus = currentStatus === 'Hidden' ? 'Visible' : 'Hidden';
+            await updateDoc(doc(db, "projects", id), { status: newStatus });
+        };
+
+        window.deleteProject = async (id) => {
+            if(confirm("Permanent Delete?")) await deleteDoc(doc(db, "projects", id));
+        };
+
+        window.exportData = () => {
+            const blob = new Blob([JSON.stringify(allProjects, null, 2)], {type: 'application/json'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `Moaaz_Backup_${new Date().toLocaleDateString()}.json`;
+            a.click();
+        };
+
+        document.getElementById('projectForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            await addDoc(collection(db, "projects"), {
+                title: document.getElementById('pName').value,
+                category: document.getElementById('pCategory').value,
+                imageUrl: document.getElementById('pUrl').value,
+                status: document.getElementById('pStatus').value,
+                createdAt: serverTimestamp()
+            });
+            e.target.reset();
+        });
     </script>
 </body>
 </html>
