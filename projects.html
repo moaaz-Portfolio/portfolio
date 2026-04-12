@@ -42,7 +42,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, query, orderBy, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, query, where, orderBy, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDsYNycH16UHTOKcQPXHEsq-glJslhdAJA",
@@ -56,14 +56,19 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // وظيفة سحب المشاريع من Firestore
         async function loadProjects() {
             const grid = document.getElementById('projects-grid');
-            const q = query(collection(db, "projects"), orderBy("createdAt", "desc"));
+            
+            // الفلتر السحري: يجلب فقط المشاريع التي حالتها Visible ومرتبة بالأحدث
+            const q = query(
+                collection(db, "projects"), 
+                where("status", "==", "Visible"), 
+                orderBy("createdAt", "desc")
+            );
             
             try {
                 const querySnapshot = await getDocs(q);
-                grid.innerHTML = ""; // مسح أي محتوى قديم
+                grid.innerHTML = ""; 
 
                 querySnapshot.forEach((doc) => {
                     const project = doc.data();
@@ -79,18 +84,30 @@
                     grid.innerHTML += card;
                 });
 
-                // تفعيل أنيميشن الظهور بعد التحميل
-                gsap.to(".reveal", { opacity: 1, y: 0, duration: 1, stagger: 0.15, ease: "power3.out" });
+                // أنيميشن الظهور الاحترافي
+                gsap.to(".reveal", { 
+                    opacity: 1, 
+                    y: 0, 
+                    duration: 1.2, 
+                    stagger: 0.2, 
+                    ease: "power4.out" 
+                });
 
             } catch (error) {
-                console.error("Error loading projects: ", error);
+                console.error("Firebase Index Required: ", error);
+                // ملاحظة: إذا لم تظهر المشاريع، افتح الـ Console واضغط على الرابط لعمل Index
             }
         }
 
+        // إعداد التمرير الناعم (Lenis)
         const lenis = new Lenis();
-        function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
+        function raf(time) { 
+            lenis.raf(time); 
+            requestAnimationFrame(raf); 
+        }
         requestAnimationFrame(raf);
 
+        // تشغيل التحميل عند فتح الصفحة
         loadProjects();
     </script>
 </body>
