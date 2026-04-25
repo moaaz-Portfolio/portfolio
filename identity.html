@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Brand Identity | Moaaz</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.19/bundled/lenis.min.js"></script>
+
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@800;900&display=swap" rel="stylesheet">
+
+<style>
+body {
+    background:#050505;
+    color:#fff;
+    font-family:'Plus Jakarta Sans',sans-serif;
+}
+
+.floating-nav {
+    position: fixed;
+    top:15px;
+    left:50%;
+    transform:translateX(-50%);
+    width:90%;
+    background:rgba(10,10,10,0.8);
+    backdrop-filter:blur(20px);
+    border-radius:100px;
+    padding:10px 20px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    border:1px solid rgba(255,255,255,0.05);
+    z-index:1000;
+}
+
+.identity-card {
+    position: relative;
+    border-radius: 30px;
+    overflow: hidden;
+    background:#0f0f0f;
+    border:1px solid rgba(255,255,255,0.05);
+    opacity:0;
+    transform:translateY(40px);
+}
+
+.identity-img {
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    transition:1s;
+}
+
+.identity-card:hover .identity-img {
+    transform:scale(1.1);
+}
+
+.overlay {
+    position:absolute;
+    inset:0;
+    background:linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+    display:flex;
+    flex-direction:column;
+    justify-content:flex-end;
+    padding:25px;
+}
+</style>
+</head>
+
+<body>
+
+<header class="floating-nav">
+    <a href="index.html" class="text-[10px] font-black uppercase">Back</a>
+    <div class="text-[9px] uppercase tracking-widest font-black">Branding</div>
+</header>
+
+<main class="pt-32 px-6 pb-20 max-w-6xl mx-auto">
+
+<h1 class="text-5xl font-black uppercase tracking-tighter mb-2">Visual</h1>
+<h1 class="text-5xl font-black uppercase tracking-tighter opacity-20 mb-12">Identity.</h1>
+
+<div id="grid" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+
+</main>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+const app = initializeApp({
+    apiKey:"AIzaSyDsYNycH16UHTOKcQPXHEsq-glJslhdAJA",
+    authDomain:"desinger-584a4.firebaseapp.com",
+    projectId:"desinger-584a4"
+});
+
+const db = getFirestore(app);
+const grid = document.getElementById("grid");
+
+async function loadBrandings() {
+    try {
+        const snap = await getDocs(collection(db,"brandings"));
+
+        const data = snap.docs.map(d => d.data());
+        console.log("🔥 ALL DATA:", data);
+
+        grid.innerHTML = "";
+
+        // فلترة مانيوال (أقوى من Firebase filter)
+        const filtered = data.filter(b => !b.status || b.status === "Visible");
+
+        // ترتيب يدوي
+        filtered.sort((a,b)=>{
+            return (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0);
+        });
+
+        filtered.forEach(b => {
+            grid.innerHTML += `
+            <div class="identity-card h-[400px]">
+                <img src="${b.imageUrl}" class="identity-img">
+                <div class="overlay">
+                    <span class="text-[10px] uppercase text-gray-400">${b.category || "Branding"}</span>
+                    <h3 class="text-2xl font-bold">${b.title || "Untitled"}</h3>
+                </div>
+            </div>
+            `;
+        });
+
+        gsap.to(".identity-card", {
+            opacity:1,
+            y:0,
+            duration:1,
+            stagger:0.2,
+            ease:"power4.out"
+        });
+
+    } catch(err){
+        console.error("🔥 ERROR:", err);
+        grid.innerHTML = "<p style='color:red'>Error loading data</p>";
+    }
+}
+
+loadBrandings();
+
+
+// Smooth scroll
+const lenis = new Lenis();
+function raf(time){
+    lenis.raf(time);
+    requestAnimationFrame(raf);
+}
+requestAnimationFrame(raf);
+
+</script>
+
+</body>
+</html>

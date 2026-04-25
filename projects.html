@@ -1,114 +1,227 @@
 <!DOCTYPE html>
+
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
     <title>Works | Moaaz Professional Designer</title>
+
     <script src="https://cdn.tailwindcss.com"></script>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
     <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.19/bundled/lenis.min.js"></script>
+
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@800;900&display=swap" rel="stylesheet">
-    
+
+   
+
     <style>
+
         body { background-color: #050505; color: #ffffff; font-family: 'Plus Jakarta Sans', sans-serif; overflow-x: hidden; width: 100%; margin: 0; }
+
         .floating-nav { position: fixed; top: 15px; left: 50%; transform: translateX(-50%); width: 90%; background: rgba(10, 10, 10, 0.8); backdrop-filter: blur(20px); border-radius: 100px; z-index: 1000; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; border: 1px solid rgba(255,255,255,0.05); }
+
         .project-card { position: relative; width: 100%; aspect-ratio: 1/1; background: #0f0f0f; border-radius: 24px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); opacity: 0; transform: translateY(30px); }
+
         .project-img { width: 100%; height: 100%; object-fit: cover; transition: transform 1s cubic-bezier(0.2, 1, 0.3, 1); }
+
         .project-card:hover .project-img { transform: scale(1.1); }
+
         .project-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 60%); display: flex; flex-direction: column; justify-content: flex-end; padding: 25px; }
+
         .category { font-size: 10px; font-weight: 900; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: 5px; }
+
         .p-title { font-size: 20px; font-weight: 800; letter-spacing: -0.02em; }
+
         .back-btn { font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.1em; }
+
     </style>
+
 </head>
+
 <body>
 
+
+
     <header class="floating-nav">
+
         <a href="index.html" class="back-btn flex items-center gap-2">
+
             <svg width="12" height="12" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6.85355 3.14645C7.04882 3.34171 7.04882 3.65829 6.85355 3.85355L3.70711 7H12.5C12.7761 7 13 7.22386 13 7.5C13 7.77614 12.7761 8 12.5 8H3.70711L6.85355 11.1464C7.04882 11.3417 7.04882 11.6583 6.85355 11.8536C6.65829 12.0488 6.34171 12.0488 6.14645 11.8536L2.14645 7.85355C1.95118 7.65829 1.95118 7.34171 2.14645 7.14645L6.14645 3.14645C6.34171 2.95118 6.65829 2.95118 6.85355 3.14645Z" fill="currentColor"></path></svg>
+
             Back
+
         </a>
+
         <div class="text-[9px] font-black tracking-widest uppercase">Works</div>
+
     </header>
 
+
+
     <main class="pt-32 px-6 pb-20">
+
         <h1 class="text-5xl font-black tracking-tighter uppercase mb-2">Selected</h1>
+
         <h1 class="text-5xl font-black tracking-tighter uppercase opacity-20 mb-12">Projects.</h1>
 
+
+
         <div id="projects-grid" class="grid grid-cols-1 md:grid-cols-2 gap-5">
+
             </div>
+
     </main>
 
+
+
     <script type="module">
+
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+
         import { getFirestore, collection, query, where, orderBy, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
+
+
         const firebaseConfig = {
+
             apiKey: "AIzaSyDsYNycH16UHTOKcQPXHEsq-glJslhdAJA",
+
             authDomain: "desinger-584a4.firebaseapp.com",
+
             projectId: "desinger-584a4",
+
             storageBucket: "desinger-584a4.firebasestorage.app",
+
             messagingSenderId: "669703794280",
+
             appId: "1:669703794280:web:eeef5b8a181d8a44de55dd"
+
         };
 
+
+
         const app = initializeApp(firebaseConfig);
+
         const db = getFirestore(app);
 
+
+
         async function loadProjects() {
+
             const grid = document.getElementById('projects-grid');
-            
+
+           
+
             // الفلتر السحري: يجلب فقط المشاريع التي حالتها Visible ومرتبة بالأحدث
+
             const q = query(
-                collection(db, "projects"), 
-                where("status", "==", "Visible"), 
+
+                collection(db, "projects"),
+
+                where("status", "==", "Visible"),
+
                 orderBy("createdAt", "desc")
+
             );
-            
+
+           
+
             try {
+
                 const querySnapshot = await getDocs(q);
-                grid.innerHTML = ""; 
+
+                grid.innerHTML = "";
+
+
 
                 querySnapshot.forEach((doc) => {
+
                     const project = doc.data();
+
                     const card = `
+
                         <div class="project-card reveal">
+
                             <img src="${project.imageUrl}" class="project-img" alt="${project.title}">
+
                             <div class="project-overlay">
+
                                 <span class="category">${project.category}</span>
+
                                 <h3 class="p-title">${project.title}</h3>
+
                             </div>
+
                         </div>
+
                     `;
+
                     grid.innerHTML += card;
+
                 });
+
+
 
                 // أنيميشن الظهور الاحترافي
-                gsap.to(".reveal", { 
-                    opacity: 1, 
-                    y: 0, 
-                    duration: 1.2, 
-                    stagger: 0.2, 
-                    ease: "power4.out" 
+
+                gsap.to(".reveal", {
+
+                    opacity: 1,
+
+                    y: 0,
+
+                    duration: 1.2,
+
+                    stagger: 0.2,
+
+                    ease: "power4.out"
+
                 });
 
+
+
             } catch (error) {
+
                 console.error("Firebase Index Required: ", error);
+
                 // ملاحظة: إذا لم تظهر المشاريع، افتح الـ Console واضغط على الرابط لعمل Index
+
             }
+
         }
+
+
 
         // إعداد التمرير الناعم (Lenis)
+
         const lenis = new Lenis();
-        function raf(time) { 
-            lenis.raf(time); 
-            requestAnimationFrame(raf); 
+
+        function raf(time) {
+
+            lenis.raf(time);
+
+            requestAnimationFrame(raf);
+
         }
+
         requestAnimationFrame(raf);
 
+
+
         // تشغيل التحميل عند فتح الصفحة
+
         loadProjects();
+
     </script>
+
 </body>
-</html>
+
+</html> 
