@@ -18,16 +18,17 @@ body {
     font-family:'Plus Jakarta Sans',sans-serif;
 }
 
+/* NAV */
 .floating-nav {
     position: fixed;
     top:15px;
     left:50%;
     transform:translateX(-50%);
     width:90%;
-    background:rgba(10,10,10,0.8);
-    backdrop-filter:blur(20px);
+    background:rgba(10,10,10,0.7);
+    backdrop-filter:blur(25px);
     border-radius:100px;
-    padding:10px 20px;
+    padding:12px 25px;
     display:flex;
     justify-content:space-between;
     align-items:center;
@@ -35,14 +36,21 @@ body {
     z-index:1000;
 }
 
+/* CARD */
 .identity-card {
     position: relative;
     border-radius: 30px;
     overflow: hidden;
     background:#0f0f0f;
     border:1px solid rgba(255,255,255,0.05);
+    transform:translateY(40px) scale(0.95);
     opacity:0;
-    transform:translateY(40px);
+    cursor:pointer;
+    transition:0.4s;
+}
+
+.identity-card:hover {
+    transform:scale(1.02);
 }
 
 .identity-img {
@@ -64,6 +72,20 @@ body {
     flex-direction:column;
     justify-content:flex-end;
     padding:25px;
+}
+
+/* skeleton */
+.skeleton {
+    height:400px;
+    border-radius:30px;
+    background:#111;
+    animation:pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0%{opacity:0.5}
+    50%{opacity:1}
+    100%{opacity:0.5}
 }
 </style>
 </head>
@@ -97,53 +119,69 @@ const app = initializeApp({
 const db = getFirestore(app);
 const grid = document.getElementById("grid");
 
-async function loadBrandings() {
+// Skeleton
+for(let i=0;i<4;i++){
+    grid.innerHTML += `<div class="skeleton"></div>`;
+}
+
+async function loadBrandings(){
     try {
         const snap = await getDocs(collection(db,"brandings"));
 
-        const data = snap.docs.map(d => d.data());
-        console.log("🔥 ALL DATA:", data);
+        let data = snap.docs.map(d => ({
+            id: d.id,
+            ...d.data()
+        }));
 
-        grid.innerHTML = "";
+        // فلترة
+        data = data.filter(b => !b.status || b.status === "Visible");
 
-        // فلترة مانيوال (أقوى من Firebase filter)
-        const filtered = data.filter(b => !b.status || b.status === "Visible");
-
-        // ترتيب يدوي
-        filtered.sort((a,b)=>{
+        // ترتيب
+        data.sort((a,b)=>{
             return (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0);
         });
 
-        filtered.forEach(b => {
+        grid.innerHTML = "";
+
+        data.forEach(b=>{
             grid.innerHTML += `
-            <div class="identity-card h-[400px]">
+            <div class="identity-card h-[400px]" onclick="openBrand('${b.id}')">
+
                 <img src="${b.imageUrl}" class="identity-img">
+
                 <div class="overlay">
                     <span class="text-[10px] uppercase text-gray-400">${b.category || "Branding"}</span>
                     <h3 class="text-2xl font-bold">${b.title || "Untitled"}</h3>
                 </div>
+
             </div>
             `;
         });
 
+        // animation
         gsap.to(".identity-card", {
             opacity:1,
             y:0,
+            scale:1,
             duration:1,
-            stagger:0.2,
+            stagger:0.15,
             ease:"power4.out"
         });
 
     } catch(err){
-        console.error("🔥 ERROR:", err);
-        grid.innerHTML = "<p style='color:red'>Error loading data</p>";
+        console.error(err);
+        grid.innerHTML = "<p style='color:red'>Error loading</p>";
     }
+}
+
+window.openBrand = (id)=>{
+    window.location.href = `brand.html?id=${id}`;
 }
 
 loadBrandings();
 
 
-// Smooth scroll
+// smooth scroll
 const lenis = new Lenis();
 function raf(time){
     lenis.raf(time);
