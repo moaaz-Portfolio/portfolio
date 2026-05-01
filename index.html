@@ -115,7 +115,8 @@
                 </p>
                 <div class="flex flex-row gap-3 justify-center items-center">
                     <a href="projects.html" class="cta-btn">PROJECTS</a>
-                                  // --- Cinematic Loader Animation ---<a href="identity.html" class="cta-btn-outline">BRANDING</a>
+                 <a href="identity.html" class="cta-btn-outline">BRANDING</a>
+                          
                 </div>
             </div>
         </section>
@@ -153,8 +154,12 @@
         function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
         requestAnimationFrame(raf);
 
+        
         // --- Cinematic Loader Animation ---
+
         const tl = gsap.timeline();
+        
+        // --- Cinematic Loader Animation ---
         
         tl.from("#L-Name", { opacity: 0, y: 30, duration: 1, ease: "power4.out" })
           .from("#L-Sub", { opacity: 0, letterSpacing: "0em", duration: 1, ease: "power2.out" }, "-=0.5")
@@ -186,3 +191,4 @@
 </body>
 </html>
         
+    
