@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moaaz | Analytics Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800;900&display=swap" rel="stylesheet">
+    <style>
+        body { background-color: #050505; color: #ffffff; font-family: 'Plus Jakarta Sans', sans-serif; }
+        .glass-card { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05); backdrop-filter: blur(20px); border-radius: 24px; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+    </style>
+</head>
+<body class="p-6 md:p-12 min-h-screen">
+
+    <!-- الهيدر الرئيسي للوحة التحكم -->
+    <header class="mb-12 flex justify-between items-center">
+        <div>
+            <h1 class="text-4xl font-black tracking-tighter uppercase">Studio</h1>
+            <h1 class="text-4xl font-black tracking-tighter uppercase opacity-20">Analytics.</h1>
+        </div>
+        <div class="text-[10px] font-black tracking-widest bg-white text-black px-4 py-2 rounded-full uppercase">Live Data</div>
+    </header>
+
+    <!-- شاشات عرض الأرقام الكبيرة (Counter Cards) -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+        <div class="glass-card p-8">
+            <span class="text-[10px] font-black text-white/40 tracking-widest uppercase block mb-2">Total Unique Visits</span>
+            <div id="total-visits" class="text-5xl font-black tracking-tight">0</div>
+        </div>
+        <div class="glass-card p-8">
+            <span class="text-[10px] font-black text-white/40 tracking-widest uppercase block mb-2">Desktop Traffic</span>
+            <div id="desktop-visits" class="text-5xl font-black tracking-tight text-gray-400">0</div>
+        </div>
+        <div class="glass-card p-8">
+            <span class="text-[10px] font-black text-white/40 tracking-widest uppercase block mb-2">Mobile Traffic</span>
+            <div id="mobile-visits" class="text-5xl font-black tracking-tight text-gray-500">0</div>
+        </div>
+    </div>
+
+    <!-- جدول البيانات التفصيلي للزوار الزاحفين للموقع -->
+    <div class="glass-card p-6 md:p-8">
+        <h3 class="text-xl font-black tracking-tight uppercase mb-6">Recent Live Visitors</h3>
+        
+        <div class="overflow-x-auto custom-scrollbar">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="border-b border-white/10 text-[10px] uppercase tracking-widest text-white/40">
+                        <th class="pb-4 font-black">Location</th>
+                        <th class="pb-4 font-black">Device</th>
+                        <th class="pb-4 font-black">OS / Browser</th>
+                        <th class="pb-4 font-black text-right">Time</th>
+                    </tr>
+                </thead>
+                <tbody id="visitors-table-body" class="divide-y divide-white/5 text-sm">
+                    <!-- البيانات سيتم حقنها هنا تلقائياً بواسطة الجافاسكريبت -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, collection, query, orderBy, limit, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDsYNycH16UHTOKcQPXHEsq-glJslhdAJA",
+            authDomain: "desinger-584a4.firebaseapp.com",
+            projectId: "desinger-584a4",
+            storageBucket: "desinger-584a4.firebasestorage.app",
+            messagingSenderId: "669703794280",
+            appId: "1:669703794280:web:eeef5b8a181d8a44de55dd"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        const tableBody = document.getElementById('visitors-table-body');
+        const totalVisitsEl = document.getElementById('total-visits');
+        const desktopVisitsEl = document.getElementById('desktop-visits');
+        const mobileVisitsEl = document.getElementById('mobile-visits');
+
+        // جلب البيانات بشكل مباشر وتحديث فوري بمجرد دخول أي شخص (Real-time Listener)
+        const q = query(collection(db, "visitors"), orderBy("timestamp", "desc"), limit(50));
+
+        onSnapshot(q, (snapshot) => {
+            tableBody.innerHTML = "";
+            let total = snapshot.size;
+            let desktopCount = 0;
+            let mobileCount = 0;
+
+            snapshot.forEach((doc) => {
+                const data = doc.data();
+                
+                if(data.device === "Desktop") desktopCount++;
+                if(data.device === "Mobile") mobileCount++;
+
+                // تحويل ميعاد السيرفر لوقت مقروء ومناسب
+                const timeStr = data.timestamp ? new Date(data.timestamp.seconds * 1000).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : "Just Now";
+                const dateStr = data.timestamp ? new Date(data.timestamp.seconds * 1000).toLocaleDateString([], {month: 'short', day: 'numeric'}) : "";
+
+                const row = `
+                    <tr class="hover:bg-white/[0.02] transition-colors">
+                        <td class="py-4 font-semibold text-white flex items-center gap-2">
+                            <span class="text-xs opacity-60">${data.countryCode}</span>
+                            <span>${data.city}, ${data.country}</span>
+                        </td>
+                        <td class="py-4">
+                            <span class="px-2 py-1 rounded text-[11px] font-bold uppercase tracking-wider ${data.device === 'Desktop' ? 'bg-blue-500/10 text-blue-400' : 'bg-purple-500/10 text-purple-400'}">
+                                ${data.device}
+                            </span>
+                        </td>
+                        <td class="py-4 text-white/60 text-xs font-mono">${data.os} / ${data.browser}</td>
+                        <td class="py-4 text-right text-white/40 text-xs font-medium">${dateStr} - ${timeStr}</td>
+                    </tr>
+                `;
+                tableBody.innerHTML += row;
+            });
+
+            // تحديث شاشات الأرقام بالأعلى
+            totalVisitsEl.innerText = total;
+            desktopVisitsEl.innerText = desktopCount;
+            mobileVisitsEl.innerText = mobileCount;
+        });
+    </script>
+</body>
+</html>

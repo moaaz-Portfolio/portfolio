@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,87 +12,22 @@
     
     <style>
         body { background-color: #050505; color: #ffffff; font-family: 'Plus Jakarta Sans', sans-serif; overflow-x: hidden; width: 100%; margin: 0; }
-
-        /* اللودر المحترف الجديد */
-        #loader {
-            position: fixed; inset: 0; z-index: 9999;
-            display: flex; justify-content: center; align-items: center;
-            background: #000;
-        }
-
-        .loader-wrapper { text-align: center; width: 100%; px: 20px; }
-
-        .loader-text {
-            font-size: clamp(1rem, 5vw, 1.5rem);
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: 0.3em;
-            color: #fff;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .loader-main-name {
-            font-size: clamp(1.5rem, 8vw, 3rem);
-            letter-spacing: -0.02em;
-            background: linear-gradient(to bottom, #fff 0%, #444 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        /* نافيجيشن */
-        .floating-nav {
-            position: fixed; top: 15px; left: 50%; transform: translateX(-50%);
-            width: 90%; background: rgba(10, 10, 10, 0.8); backdrop-filter: blur(15px);
-            border-radius: 100px; z-index: 1000; padding: 10px 20px;
-            display: flex; justify-content: space-between; align-items: center;
-            border: 1px solid rgba(255,255,255,0.05);
-        }
-
-        /* الاسم في الهيرو */
-        .hero-title {
-            font-size: clamp(2.2rem, 11vw, 4rem); 
-            font-weight: 900; line-height: 1.05; letter-spacing: -0.04em;
-            text-transform: uppercase; text-align: center;
-            width: 100%; padding: 0 15px;
-        }
-
+        #loader { position: fixed; inset: 0; z-index: 9999; display: flex; justify-content: center; align-items: center; background: #000; }
+        .loader-wrapper { text-align: center; width: 100%; padding: 0 20px; }
+        .loader-text { font-size: clamp(1rem, 5vw, 1.5rem); font-weight: 900; text-transform: uppercase; letter-spacing: 0.3em; color: #fff; display: flex; flex-direction: column; gap: 10px; }
+        .loader-main-name { font-size: clamp(1.5rem, 8vw, 3rem); letter-spacing: -0.02em; background: linear-gradient(to bottom, #fff 0%, #444 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .floating-nav { position: fixed; top: 15px; left: 50%; transform: translateX(-50%); width: 90%; background: rgba(10, 10, 10, 0.8); backdrop-filter: blur(15px); border-radius: 100px; z-index: 1000; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; border: 1px solid rgba(255,255,255,0.05); }
+        .hero-title { font-size: clamp(2.2rem, 11vw, 4rem); font-weight: 900; line-height: 1.05; letter-spacing: -0.04em; text-transform: uppercase; text-align: center; width: 100%; padding: 0 15px; }
         .reveal { clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%); overflow: hidden; }
         .reveal span { display: block; transform: translateY(115%); }
-
-        .cta-btn {
-            background: #fff; color: #000; padding: 16px 30px; border-radius: 100px;
-            font-weight: 900; font-size: 10px; letter-spacing: 0.1em;
-            display: inline-block; transition: all 0.3s ease;
-        }
-
-        .cta-btn-outline {
-            background: transparent; color: #fff; border: 1px solid rgba(255,255,255,0.2); padding: 16px 30px; border-radius: 100px;
-            font-weight: 900; font-size: 10px; letter-spacing: 0.1em;
-            display: inline-block; transition: all 0.3s ease;
-        }
-
-        .cta-btn:hover { background: #444; color: #fff; transform: translateY(-2px); }
-        .cta-btn-outline:hover { background: #fff; color: #000; transform: translateY(-2px); }
-
+        .cta-btn { background: #fff; color: #000; padding: 16px 30px; border-radius: 100px; font-weight: 900; font-size: 10px; letter-spacing: 0.1em; display: inline-block; transition: all 0.3s ease; }
         .skills-section { background: #fff; color: #000; padding: 80px 25px; border-radius: 40px 40px 0 0; }
         .f-card { background: #fcfcfc; border-radius: 25px; padding: 30px; border: 1px solid #eee; margin-bottom: 15px; opacity: 0; transform: translateY(20px); }
-        
-        .glass { background: rgba(255,255,255,0.02); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.05); }
     </style>
 </head>
 <body>
 
-    <div id="loader">
-        <div class="loader-wrapper">
-            <div class="loader-text">
-                <span class="opacity-40 text-[10px]">Creative Studio</span>
-                <div class="loader-main-name" id="L-Name">MOAAZ</div>
-                <span class="text-[10px] tracking-[0.6em]" id="L-Sub">PROFESSIONAL DESIGNER</span>
-            </div>
-        </div>
-    </div>
+    <div id="loader"><div class="loader-wrapper"><div class="loader-text"><span class="opacity-40 text-[10px]">Creative Studio</span><div class="loader-main-name" id="L-Name">MOAAZ</div><span class="text-[10px] tracking-[0.6em]" id="L-Sub">PROFESSIONAL DESIGNER</span></div></div></div>
 
     <header class="floating-nav">
         <div class="text-xs font-black tracking-tighter">MOAAZ.</div>
@@ -103,93 +37,88 @@
     <main>
         <section class="min-h-screen flex flex-col justify-center items-center pt-10">
             <p class="text-[9px] uppercase tracking-[0.5em] mb-6 opacity-0 hero-fade font-bold text-gray-500">Visual Architect</p>
-
-            <h1 class="hero-title">
-                <div class="reveal"><span>Moaaz</span></div>
-                <div class="reveal"><span class="text-gray-500">Professional</span></div>
-                <div class="reveal"><span>Designer</span></div>
-            </h1>
-            
-            <div class="text-center px-8 opacity-0 hero-fade">
-                <p class="text-gray-400 text-[13px] max-w-[280px] mx-auto mt-6 leading-relaxed mb-8">
-                    Elevating brand identities through high-end <span class="text-white">Canva mastery</span> and minimalist luxury.
-                </p>
-                <div class="flex flex-row gap-3 justify-center items-center">
-                    <a href="projects.html" class="cta-btn">PROJECTS</a>
-                 <!-- <a href="identity.html" class="cta-btn-outline">BRANDING</a> -->
-                          
-                </div>
-            </div>
+            <h1 class="hero-title"><div class="reveal"><span>Moaaz</span></div><div class="reveal"><span class="text-gray-500">Professional</span></div><div class="reveal"><span>Designer</span></div></h1>
+            <div class="text-center px-8 opacity-0 hero-fade"><p class="text-gray-400 text-[13px] max-w-[280px] mx-auto mt-6 leading-relaxed mb-8">Elevating brand identities through high-end <span class="text-white">Canva mastery</span> and minimalist luxury.</p><a href="projects.html" class="cta-btn">PROJECTS</a></div>
         </section>
 
         <section id="skills" class="skills-section">
             <h2 class="text-5xl font-black tracking-tighter uppercase mb-10">Core<br><span class="opacity-20">Skills.</span></h2>
             <div class="space-y-4">
-                <div class="f-card scr-fade">
-                    <span class="text-[10px] font-black opacity-20">01</span>
-                    <h3 class="text-xl font-bold mt-1">Canva Mastery</h3>
-                    <p class="text-gray-500 text-sm mt-2">Bespoke layouts that redefine digital visual standards.</p>
-                </div>
-                <div class="f-card scr-fade">
-                    <span class="text-[10px] font-black opacity-20">02</span>
-                    <h3 class="text-xl font-bold mt-1">Visual Strategy</h3>
-                    <p class="text-gray-500 text-sm mt-2">Identity design that drives premium brand engagement.</p>
-                </div>
-                <div class="f-card scr-fade">
-                    <span class="text-[10px] font-black opacity-20">03</span>
-                    <h3 class="text-xl font-bold mt-1">Rapid Execution</h3>
-                    <p class="text-gray-500 text-sm mt-2">Elite quality results delivered with specialist speed.</p>
-                </div>
+                <div class="f-card scr-fade"><span class="text-[10px] font-black opacity-20">01</span><h3 class="text-xl font-bold mt-1">Canva Mastery</h3><p class="text-gray-500 text-sm mt-2">Bespoke layouts that redefine digital visual standards.</p></div>
+                <div class="f-card scr-fade"><span class="text-[10px] font-black opacity-20">02</span><h3 class="text-xl font-bold mt-1">Visual Strategy</h3><p class="text-gray-500 text-sm mt-2">Identity design that drives premium brand engagement.</p></div>
+                <div class="f-card scr-fade"><span class="text-[10px] font-black opacity-20">03</span><h3 class="text-xl font-bold mt-1">Rapid Execution</h3><p class="text-gray-500 text-sm mt-2">Elite quality results delivered with specialist speed.</p></div>
             </div>
         </section>
 
-     
         <footer class="py-20 text-center bg-white text-black">
             <h3 class="text-4xl font-black tracking-tighter mb-6 uppercase">Let's Connect.</h3>
             <a href="mailto:moaaz.designer@gmail.com" class="text-sm font-bold border-b-2 border-black pb-1">moaaz.designer@gmail.com</a>
         </footer>
     </main>
 
-    <script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        // إعدادات البوت - ضع بياناتك هنا
+        const BOT_TOKEN = "8381476288:AAGAYYSXE1rvIG0-2PN8QvpkeavvwZ1h24g"; 
+        const CHAT_ID = "6404301620";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDsYNycH16UHTOKcQPXHEsq-glJslhdAJA",
+            authDomain: "desinger-584a4.firebaseapp.com",
+            projectId: "desinger-584a4",
+            storageBucket: "desinger-584a4.firebasestorage.app",
+            messagingSenderId: "669703794280",
+            appId: "1:669703794280:web:eeef5b8a181d8a44de55dd"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        async function trackVisitor() {
+            if (sessionStorage.getItem('tracked_session')) return;
+
+            try {
+                const geoResponse = await fetch('https://ipapi.co/json/');
+                const geoData = await geoResponse.json();
+
+                // إرسال إشعار لتليجرام
+                const message = `🚀 زائر جديد!%0Aالبلد: ${geoData.country_name}%0Aالمدينة: ${geoData.city}`;
+                fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${message}`);
+
+                const userAgent = navigator.userAgent;
+                const visitorData = {
+                    country: geoData.country_name || "Unknown",
+                    city: geoData.city || "Unknown",
+                    device: /Mobi/i.test(userAgent) ? "Mobile" : "Desktop",
+                    timestamp: serverTimestamp()
+                };
+
+                await addDoc(collection(db, "visitors"), visitorData);
+                sessionStorage.setItem('tracked_session', 'true');
+            } catch (error) { console.error("Tracking error:", error); }
+        }
+
+        trackVisitor();
+
+        // باقي الأنيميشن
         const lenis = new Lenis();
         function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
         requestAnimationFrame(raf);
 
-        
-        // --- Cinematic Loader Animation ---
-
         const tl = gsap.timeline();
-        
-        // --- Cinematic Loader Animation ---
-        
-        tl.from("#L-Name", { opacity: 0, y: 30, duration: 1, ease: "power4.out" })
-          .from("#L-Sub", { opacity: 0, letterSpacing: "0em", duration: 1, ease: "power2.out" }, "-=0.5")
-          .to("#loader", { 
-              clipPath: "inset(0 0 100% 0)", 
-              duration: 1.2, 
-              ease: "expo.inOut", 
-              delay: 0.8,
-              onComplete: () => {
-                  gsap.to(".reveal span", { y: 0, duration: 1, stagger: 0.1, ease: "power4.out" });
-                  gsap.to(".hero-fade", { opacity: 1, y: -10, duration: 0.8, delay: 0.5 });
-              }
-          });
+        tl.from("#L-Name", { opacity: 0, y: 30, duration: 1 }).to("#loader", { clipPath: "inset(0 0 100% 0)", duration: 1.2, delay: 0.8, onComplete: () => {
+            gsap.to(".reveal span", { y: 0, duration: 1, stagger: 0.1 });
+            gsap.to(".hero-fade", { opacity: 1, y: -10, duration: 0.8 });
+        }});
 
         gsap.registerPlugin(ScrollTrigger);
-
         document.querySelectorAll(".scr-fade").forEach(el => {
-            gsap.to(el, {
-                scrollTrigger: { trigger: el, start: "top 90%" },
-                opacity: 1, y: 0, duration: 0.8
-            });
+            gsap.to(el, { scrollTrigger: { trigger: el, start: "top 90%" }, opacity: 1, y: 0, duration: 0.8 });
         });
 
-        gsap.to("body", {
-            scrollTrigger: { trigger: "#skills", start: "top center", end: "top", scrub: true },
-            backgroundColor: "#ffffff"
-        });
+        gsap.to("body", { scrollTrigger: { trigger: "#skills", start: "top center", scrub: true }, backgroundColor: "#ffffff" });
     </script>
 </body>
 </html>
-        
-    
