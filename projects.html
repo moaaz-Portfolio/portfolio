@@ -36,6 +36,42 @@
         .custom-scroll::-webkit-scrollbar { width: 4px; }
         .custom-scroll::-webkit-scrollbar-track { background: transparent; }
         .custom-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+        
+        /* تحسينات الموبايل - الأزرار ثابتة في الأسفل */
+        @media (max-width: 768px) {
+            .behance-panel {
+                flex-direction: column !important;
+            }
+            .modal-image-area {
+                height: 35vh !important;
+                min-height: 250px;
+            }
+            .modal-content-scroll {
+                height: auto !important;
+                max-height: calc(65vh - 80px);
+                overflow-y: auto;
+                padding-bottom: 100px !important;
+            }
+            /* شريط الأزرار الثابت في الأسفل */
+            .fixed-actions {
+                position: fixed !important;
+                bottom: 0 !important;
+                left: 0 !important;
+                right: 0 !important;
+                width: 100% !important;
+                background: rgba(10, 10, 10, 0.95) !important;
+                backdrop-filter: blur(20px) !important;
+                border-top: 1px solid rgba(255,255,255,0.1) !important;
+                padding: 12px 16px !important;
+                z-index: 100 !important;
+            }
+            .fixed-actions .grid {
+                gap: 12px !important;
+            }
+            .fixed-actions .action-btn {
+                padding: 12px !important;
+            }
+        }
     </style>
 </head>
 <body>
@@ -55,28 +91,30 @@
         <div id="projects-grid" class="grid grid-cols-1 md:grid-cols-2 gap-5"></div>
     </main>
 
-    <!-- بوابة العرض الجانبية -->
+    <!-- بوابة العرض الجانبية - الأزرار ثابتة في الأسفل للموبايل -->
     <div id="behance-modal" class="fixed inset-0 z-[2000] behance-backdrop opacity-0 pointer-events-none transition-opacity duration-400 flex justify-end">
         
-        <div id="modal-panel" class="behance-panel w-full max-w-5xl h-full flex flex-col md:flex-row transform translate-x-full">
+        <div id="modal-panel" class="behance-panel w-full max-w-5xl h-full flex flex-col transform translate-x-full">
             
-            <div class="relative flex-grow h-[50vh] md:h-full bg-black/40 flex items-center justify-center p-4 group overflow-hidden">
+            <!-- منطقة الصورة -->
+            <div class="modal-image-area relative flex-shrink-0 h-[40vh] md:h-full md:w-1/2 bg-black/40 flex items-center justify-center p-4 group overflow-hidden" style="min-height: 250px;">
                 <img id="view-img" src="" class="max-w-full max-h-full object-contain rounded-xl shadow-2xl select-none" alt="Case Study Screen">
                 
-                <button id="close-modal" class="absolute top-6 left-6 text-white/50 hover:text-white transition-all p-3 bg-black/40 hover:bg-black/80 rounded-full border border-white/10 backdrop-blur-md">
+                <button id="close-modal" class="absolute top-4 right-4 text-white/50 hover:text-white transition-all p-2 bg-black/40 hover:bg-black/80 rounded-full border border-white/10 backdrop-blur-md z-20">
                     <svg width="18" height="18" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M11.7816 4.03157C12.0062 3.80696 12.0062 3.44288 11.7816 3.21827C11.557 2.99367 11.1929 2.99367 10.9683 3.21827L7.5 6.68657L4.03173 3.21827C3.80712 2.99367 3.44304 2.99367 3.21843 3.21827C2.99383 3.44288 2.99383 3.80696 3.21843 4.03157L6.6867 7.5L3.21843 10.9684C2.99383 11.193 2.99383 11.5571 3.21843 11.7817C3.44304 12.0063 3.80712 12.0063 4.03173 11.7817L7.5 8.31343L10.9683 11.7817C11.1929 12.0063 11.557 12.0063 11.7816 11.7817C12.0062 11.5571 12.0062 11.193 11.7816 10.9684L8.3133 7.5L11.7816 4.03157Z" fill="currentColor"></path></svg>
                 </button>
             </div>
 
-            <div class="w-full md:w-[380px] h-[50vh] md:h-full bg-[#0a0a0a] p-8 flex flex-col justify-between border-t md:border-t-0 md:border-l border-white/5 custom-scroll overflow-y-auto">
+            <!-- منطقة المحتوى القابلة للتمرير -->
+            <div class="modal-content-scroll w-full md:w-1/2 h-auto md:h-full bg-[#0a0a0a] p-6 border-t md:border-t-0 md:border-l border-white/5 custom-scroll overflow-y-auto" style="max-height: 60vh; overflow-y: auto;">
                 
-                <div class="flex flex-col gap-8">
+                <div class="flex flex-col gap-5 pb-24 md:pb-0">
                     <div class="anim-target">
                         <span id="view-cat" class="category text-xs tracking-widest text-white/40 block mb-2">CREATIVE DIRECTION</span>
-                        <h2 id="view-title" class="text-2xl font-black tracking-tight text-white leading-tight">Project Masterpiece</h2>
+                        <h2 id="view-title" class="text-xl md:text-2xl font-black tracking-tight text-white leading-tight">Project Masterpiece</h2>
                     </div>
 
-                    <div class="flex items-center gap-6 py-4 border-y border-white/5 anim-target">
+                    <div class="flex items-center gap-6 py-3 border-y border-white/5 anim-target">
                         <div class="flex items-center gap-2 text-white/50 text-xs">
                             <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
                             <span id="stat-views">0</span> Views
@@ -87,7 +125,7 @@
                         </div>
                     </div>
 
-                    <div class="flex flex-col gap-4 anim-target">
+                    <div class="flex flex-col gap-3 anim-target">
                         <h4 class="text-[10px] font-black tracking-widest text-white/30 uppercase">Project Details</h4>
                         <p class="text-sm text-white/70 leading-relaxed font-normal">Premium visual layout meticulously tailored for modern user engagement with sleek alignment and minimalist aesthetic.</p>
                         
@@ -99,25 +137,26 @@
                     </div>
                 </div>
 
-                <div class="flex flex-col gap-3 mt-12 anim-target">
-                    <div class="grid grid-cols-3 gap-2">
-                        <button id="like-btn" class="action-btn flex flex-col items-center justify-center py-3 rounded-xl gap-1 text-white/60">
-                            <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-                            <span class="text-[9px] font-bold uppercase">Like</span>
-                        </button>
-                        
-                        <button id="share-btn" class="action-btn flex flex-col items-center justify-center py-3 rounded-xl gap-1 text-white/60">
-                            <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M8.684 10.742l4.228-2.114M8.684 13.258l4.228 2.114M7.4 12a1.4 1.4 0 11-2.8 0 1.4 1.4 0 012.8 0zm7.8-4.4a1.4 1.4 0 11-2.8 0 1.4 1.4 0 012.8 0zm0 8.8a1.4 1.4 0 11-2.8 0 1.4 1.4 0 012.8 0z"/></svg>
-                            <span id="share-text" class="text-[9px] font-bold uppercase">Share</span>
-                        </button>
+            </div>
 
-                        <a id="download-btn" href="" download target="_blank" class="action-btn flex flex-col items-center justify-center py-3 rounded-xl gap-1 text-white/60 text-center">
-                            <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-                            <span class="text-[9px] font-bold uppercase">Save</span>
-                        </a>
-                    </div>
+            <!-- شريط الأزرار - ثابت في أسفل الشاشة للموبايل -->
+            <div class="fixed-actions md:relative md:w-1/2 md:bg-transparent md:border-t-0 md:p-0">
+                <div class="grid grid-cols-3 gap-2 md:gap-2">
+                    <button id="like-btn" class="action-btn flex flex-col items-center justify-center py-3 rounded-xl gap-1 text-white/60">
+                        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                        <span class="text-[9px] font-bold uppercase">Like</span>
+                    </button>
+                    
+                    <button id="share-btn" class="action-btn flex flex-col items-center justify-center py-3 rounded-xl gap-1 text-white/60">
+                        <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M8.684 10.742l4.228-2.114M8.684 13.258l4.228 2.114M7.4 12a1.4 1.4 0 11-2.8 0 1.4 1.4 0 012.8 0zm7.8-4.4a1.4 1.4 0 11-2.8 0 1.4 1.4 0 012.8 0zm0 8.8a1.4 1.4 0 11-2.8 0 1.4 1.4 0 012.8 0z"/></svg>
+                        <span id="share-text" class="text-[9px] font-bold uppercase">Share</span>
+                    </button>
+
+                    <a id="download-btn" href="" download target="_blank" class="action-btn flex flex-col items-center justify-center py-3 rounded-xl gap-1 text-white/60 text-center">
+                        <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                        <span class="text-[9px] font-bold uppercase">Save</span>
+                    </a>
                 </div>
-
             </div>
         </div>
     </div>
@@ -135,14 +174,12 @@
             appId: "1:669703794280:web:eeef5b8a181d8a44de55dd"
         };
 
-        // Telegram Bot Config
         const BOT_TOKEN = "8381476288:AAGAYYSXE1rvIG0-2PN8QvpkeavvwZ1h24g";
         const CHAT_ID = "6404301620";
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // دالة إرسال إشعار للتليجرام
         async function sendTelegramNotification(projectTitle, action, newLikesCount) {
             try {
                 let message = '';
@@ -162,7 +199,6 @@
             }
         }
 
-        // ربط عناصر الـ DOM
         const modal = document.getElementById('behance-modal');
         const panel = document.getElementById('modal-panel');
         const viewImg = document.getElementById('view-img');
@@ -299,7 +335,6 @@
               .to(modal, { opacity: 0, duration: 0.3, ease: "power2.in" }, "-=0.2");
         }
 
-        // منطق الـ Like مع إرسال إشعار للتليجرام
         likeBtn.addEventListener('click', async () => {
             if (!currentActiveProjectId) return;
             
@@ -310,7 +345,6 @@
             let currentLikes = parseInt(statLikes.innerText.replace(/,/g, ''));
             
             if(!hasLiked) {
-                // تم الإعجاب
                 likeBtn.classList.add('liked');
                 const newLikes = currentLikes + 1;
                 statLikes.innerText = newLikes.toLocaleString();
@@ -319,11 +353,9 @@
                 localStorage.setItem(`liked_${currentActiveProjectId}`, 'true');
                 await updateDoc(projectRef, { likes: increment(1) });
                 
-                // إرسال إشعار للتليجرام
                 await sendTelegramNotification(currentActiveProjectTitle, 'liked', newLikes);
                 
             } else {
-                // إلغاء الإعجاب
                 likeBtn.classList.remove('liked');
                 const newLikes = Math.max(0, currentLikes - 1);
                 statLikes.innerText = newLikes.toLocaleString();
@@ -332,7 +364,6 @@
                 localStorage.removeItem(`liked_${currentActiveProjectId}`);
                 await updateDoc(projectRef, { likes: increment(-1) });
                 
-                // إرسال إشعار إلغاء للتليجرام
                 await sendTelegramNotification(currentActiveProjectTitle, 'unliked', newLikes);
             }
         });
